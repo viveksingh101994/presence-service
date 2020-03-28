@@ -1,0 +1,15 @@
+{
+  "linterOptions": {
+    "exclude": [
+      "node_modules/**/*.ts",
+      ".nyc_output/",
+      "coverage/lcov-report/*.js"
+    ]
+  },
+  "rules": {
+    "ordered-imports": false,
+    "no-console": false,
+    "member-access": [true, "no-public"],
+    "no-debugger": false
+  }
+}

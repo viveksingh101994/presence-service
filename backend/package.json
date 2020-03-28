@@ -1,0 +1,75 @@
+{
+  "name": "presence-service-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "build:w": "tsc -w",
+    "start": "npm run build && node dist/lib/src/index.js",
+    "test:unit:nocoverage": "NODE_ENV=test mocha --opts mocha_unit.opts",
+    "test:unit": "NODE_ENV=test nyc mocha --opts mocha_unit.opts",
+    "test:tslint": "tslint  --project tsconfig.json",
+    "fix:tslint": "tslint --fix --project tsconfig.json",
+    "test:prettier": "prettier --list-different \"{lib,migrations,seeds}/**/*.{ts,js,css,scss,md,html}\"",
+    "fix:prettier": "prettier --write \"{lib,migrations,seeds}/**/*.{ts,js,css,scss,md,html}\"",
+    "clean": "rm -rf node_modules dist coverage",
+    "coverage": "nyc report",
+    "migrate:create": "knex migrate:make",
+    "migrate:latest": "knex migrate:latest",
+    "migrate:rollback": " knex migrate:rollback",
+    "seed:make": "knex seed:make",
+    "seed:run": "knex seed:run",
+    "test": "mocha --opts mocha_unit.opts",
+    "test:coverage": "nyc check-coverage --lines 0 --functions 0 --branches 0 --statements 0"
+  },
+  "nyc": {
+    "include": [
+      "lib/*.ts",
+      "lib/**/*.ts"
+    ],
+    "exclude": [
+      "typings",
+      "node_modules",
+      "lib/**/*.d.ts",
+      "lib/**/*.spec.ts",
+      "lib/src/index.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "html",
+      "text"
+    ],
+    "all": true
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "crypto-js": "^4.0.0",
+    "express": "^4.17.1",
+    "knex": "^0.20.13",
+    "mssql": "^6.2.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/crypto-js": "^3.1.43",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.9.5",
+    "@types/sinon": "^7.5.2",
+    "@types/sinon-chai": "^3.2.3",
+    "chai": "^4.2.0",
+    "mocha": "^7.1.1",
+    "nyc": "^15.0.0",
+    "prettier": "^2.0.2",
+    "sinon": "^9.0.1",
+    "ts-node": "^8.8.1",
+    "tsc": "^1.20150623.0",
+    "tslint": "^6.1.0",
+    "typescript": "^3.8.3"
+  }
+}
