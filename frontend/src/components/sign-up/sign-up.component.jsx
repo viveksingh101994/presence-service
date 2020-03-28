@@ -5,6 +5,8 @@ import CustomButton from "../custom-button/custom-button.component";
 
 import { connect } from "react-redux";
 import "./sign-up.styles.scss";
+import UploadInput from "../upload-input/upload-input.component";
+import { signUpStart } from "../../redux/user/user.actions";
 
 class SignUp extends React.Component {
   constructor() {
@@ -13,19 +15,34 @@ class SignUp extends React.Component {
       displayName: "",
       email: "",
       password: "",
-      confirmPassword: ""
+      confirmPassword: "",
+      avatar: ""
     };
   }
 
   handleSubmit = async e => {
     e.preventDefault();
     const { signUpStart } = this.props;
-    const { displayName, email, password, confirmPassword } = this.state;
+    const {
+      displayName,
+      email,
+      password,
+      confirmPassword,
+      avatar
+    } = this.state;
     if (password !== confirmPassword) {
       alert("passwords don't match");
       return;
     }
-    signUpStart({ displayName, email, password });
+    signUpStart({ displayName, email, password, avatar });
+  };
+
+  avatarChange = async e => {
+    e.preventDefault();
+    if (isValidImage(e.target.files)) {
+      const file = await toBase64(e.target.files[0]);
+      this.setState({ avatar: file });
+    }
   };
 
   handleChange = e => {
@@ -34,7 +51,13 @@ class SignUp extends React.Component {
   };
 
   render() {
-    const { displayName, email, password, confirmPassword } = this.state;
+    const {
+      displayName,
+      email,
+      password,
+      confirmPassword,
+      avatar
+    } = this.state;
     return (
       <div className="sign-up">
         <h2 className="title">I do not have a account</h2>
@@ -72,7 +95,13 @@ class SignUp extends React.Component {
             label="Confirm Password"
             required
           ></FormInput>
-
+          <UploadInput
+            type="file"
+            name="uploadAvatar"
+            avatar={avatar}
+            onChange={this.avatarChange}
+            label="Upload Image"
+          />
           <CustomButton type="submit"> SIGN UP</CustomButton>
         </form>
       </div>
@@ -80,8 +109,33 @@ class SignUp extends React.Component {
   }
 }
 
+const toBase64 = file => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+};
 
-export default connect(
-  null,
-  null,
-)(SignUp);
+const isValidImage = files => {
+  if (!(files instanceof FileList)) {
+    return false;
+  }
+  const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+  if (!allowedExtensions.test(files[0].name)) {
+    alert("File format must be JPG, JPEG, PNG, or GIF.");
+    return false;
+  }
+  const fileSize = Math.round(files[0].size / 1024);
+  if (fileSize > 300) {
+    alert("Image size must not exceed 200 KB.");
+    return false;
+  }
+  return true;
+};
+
+const mapDispatchToProps = dispatch => ({
+  signUpStart: userCredentials => dispatch(signUpStart(userCredentials))
+});
+export default connect(null, mapDispatchToProps)(SignUp);
