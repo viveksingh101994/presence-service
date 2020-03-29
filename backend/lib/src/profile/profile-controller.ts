@@ -2,6 +2,8 @@ import { Response } from '../common';
 
 export class ProfileController {
   static async users(req, res, next) {
-    next(Response.Success);
+    const successResponse = Response.Success;
+    successResponse.message = req.user;
+    return next(successResponse);
   }
 }
