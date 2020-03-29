@@ -13,6 +13,10 @@ export let Response = {
       message: 'User already exist',
     },
   },
+  FireBase: {
+    status: 400,
+    message: {},
+  },
   InvalidParam: {
     status: 400,
     message: {

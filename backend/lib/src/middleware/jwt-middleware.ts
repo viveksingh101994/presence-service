@@ -4,11 +4,9 @@ import { jwt } from '../common/jwt';
 // Need to fix the middleware
 export class JWTMiddleware {
   static async verify(req, res, next) {
-    if (req.headers.authorization) {
+    if (req.cookies.auth) {
       try {
-        const decoded: any = await jwt.verifyandDecodeJwt(
-          req.headers.authorization
-        );
+        const decoded: any = await jwt.verifyandDecodeJwt(req.cookies.auth);
         req.user = decoded.context;
         return next();
       } catch (err) {

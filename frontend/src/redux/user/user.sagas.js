@@ -73,7 +73,7 @@ import { url } from "../../global.config";
 export function* signUp({ payload }) {
   try {
     debugger;
-    yield post(`${url}/register`, { payload });
+    yield post(`${url}/api/public/register`, { payload });
     yield put(signUpSuccess({ payload }));
   } catch (err) {
     yield put(signUpFailure(err));

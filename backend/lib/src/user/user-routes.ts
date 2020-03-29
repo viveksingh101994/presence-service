@@ -9,6 +9,7 @@ router.post(
   UserController.authenticate
 );
 
+// http://localhost:3000/api/public/register
 router.post(
   Utils.getRoutePrefix(RouteType.public, '/register'),
   UserController.register

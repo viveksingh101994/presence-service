@@ -1,10 +1,9 @@
 import App from './app';
 import { routes } from './routing';
-import { mssqlConnector } from './db';
-
+import { DBConnector } from './db';
 async function initService() {
   try {
-    await mssqlConnector.checkConnection();
+    await DBConnector.initConnection();
     const app = new App([routes], process.env.PORT || '3000');
     app.listen();
   } catch (err) {

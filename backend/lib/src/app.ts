@@ -2,7 +2,7 @@ import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import { Response, Utils } from './common';
-
+import * as cors from 'cors';
 class App {
   app: express.Application;
   port: number;
@@ -30,6 +30,7 @@ class App {
         extended: false,
       })
     );
+    this.app.use(cors());
     this.app.use(cookieParser());
   }
 

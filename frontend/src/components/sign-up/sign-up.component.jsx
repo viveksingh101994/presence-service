@@ -16,7 +16,7 @@ class SignUp extends React.Component {
       email: "",
       password: "",
       confirmPassword: "",
-      avatar: ""
+      avatarUrl: ""
     };
   }
 
@@ -28,20 +28,20 @@ class SignUp extends React.Component {
       email,
       password,
       confirmPassword,
-      avatar
+      avatarUrl
     } = this.state;
     if (password !== confirmPassword) {
       alert("passwords don't match");
       return;
     }
-    signUpStart({ displayName, email, password, avatar });
+    signUpStart({ displayName, email, password, avatarUrl });
   };
 
-  avatarChange = async e => {
+  avatarUrlChange = async e => {
     e.preventDefault();
     if (isValidImage(e.target.files)) {
       const file = await toBase64(e.target.files[0]);
-      this.setState({ avatar: file });
+      this.setState({ avatarUrl: file });
     }
   };
 
@@ -56,7 +56,7 @@ class SignUp extends React.Component {
       email,
       password,
       confirmPassword,
-      avatar
+      avatarUrl
     } = this.state;
     return (
       <div className="sign-up">
@@ -98,8 +98,8 @@ class SignUp extends React.Component {
           <UploadInput
             type="file"
             name="uploadAvatar"
-            avatar={avatar}
-            onChange={this.avatarChange}
+            avatarUrl={avatarUrl}
+            onChange={this.avatarUrlChange}
             label="Upload Image"
           />
           <CustomButton type="submit"> SIGN UP</CustomButton>

@@ -4,4 +4,6 @@ export interface Profile {
   lastLogin: Date;
   avatarUrl: string | null;
   userId: number;
+  password: string | null;
+  isActive: boolean;
 }

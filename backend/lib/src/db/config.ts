@@ -1,12 +1,10 @@
-export class DBConfig {
-  static readonly mssql = {
-    host: process.env.MSSQL_HOST,
-    user: process.env.MSSQL_USER,
-    password: process.env.MSSQL_PASS,
-    database: process.env.MSSQL_NAME,
-    options: {
-      encrypt: true,
-      packetSize: 32768,
-    },
-  };
-}
+export const firebaseConfig = {
+  apiKey: process.env.FIREBASE_APIKEY,
+  authDomain: process.env.AUTHDOMAIN,
+  databaseURL: process.env.FIREBASE_DATABASEURL,
+  projectId: process.env.PROJECT_ID,
+  storageBucket: process.env.STORAGE_BUCKET,
+  messagingSenderId: process.env.MESSAGING_SENDER_ID,
+  appId: process.env.APP_ID,
+  measurementId: process.env.MEASUREMENTID,
+};

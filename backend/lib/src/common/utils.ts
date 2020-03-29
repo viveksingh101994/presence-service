@@ -65,3 +65,13 @@ export const Utils = {
     return parsed;
   },
 };
+
+export const getImgTypeAndString = (
+  avatarUrl: string
+): { imgType; baseString } => {
+  const [imgType, baseString] = avatarUrl
+    .split(',')[0]
+    .split(':')[1]
+    .split(';')[0];
+  return { imgType, baseString };
+};

@@ -13,8 +13,8 @@ const UploadInput = ({ handleChange, label, ...props }) => (
   <GroupContainer>
     <ImageThumbHolderOuter>
       <ImageThumbHolder>
-        {props.avatar ? (
-          <ImgHolder src={props.avatar} />
+        {props.avatarUrl ? (
+          <ImgHolder src={props.avatarUrl} />
         ) : (
           <CustomPadding>
             <strong>User profile image</strong>
