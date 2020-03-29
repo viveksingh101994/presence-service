@@ -1,9 +1,10 @@
 import App from './app';
 import { routes } from './routing';
-import { DBConnector } from './db';
+import { DBConnector, FireBase } from './db';
 async function initService() {
   try {
     await DBConnector.initConnection();
+    await FireBase.initConnection();
     const app = new App([routes], process.env.PORT || '3000');
     app.listen();
   } catch (err) {

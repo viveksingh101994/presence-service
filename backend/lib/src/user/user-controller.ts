@@ -39,6 +39,7 @@ export class UserController {
     const userSnapshot = await userObj.get();
     const snapShotData = userSnapshot.data();
     const jwtData = {
+      avatarUrl: snapShotData.avatarUrl,
       email: snapShotData.email,
       displayName: snapShotData.displayName,
     };

@@ -66,12 +66,20 @@ export const Utils = {
   },
 };
 
-export const getImgTypeAndString = (
-  avatarUrl: string
-): { imgType; baseString } => {
-  const [imgType, baseString] = avatarUrl
-    .split(',')[0]
-    .split(':')[1]
-    .split(';')[0];
-  return { imgType, baseString };
+export const getImgTypeAndString = (avatarUrl: string): { imgType; base64 } => {
+  const [typeData, base64] = avatarUrl.split(',');
+  const imgType = typeData.split('/')[1].split(';')[0];
+  return { imgType, base64 };
+};
+
+export const generateUUID = (): string => {
+  var d = new Date().getTime();
+  var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (
+    c
+  ) {
+    var r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
+  });
+  return uuid;
 };

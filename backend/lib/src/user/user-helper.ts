@@ -1,5 +1,6 @@
-import { DBConnector } from '../db';
+import { DBConnector, FireBase } from '../db';
 import { Profile } from '../profile/models/profile-model';
+import { getImgTypeAndString } from '../common';
 const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!userAuth) return;
   const userRef = DBConnector.firestore.doc(`users/${userAuth.uid}`);
@@ -22,6 +23,9 @@ const createUserProfileDocument = async (userAuth, additionalData) => {
 
 export const registerUser = async (userData: Profile) => {
   let { email, password, displayName, avatarUrl = null } = userData;
+  if (avatarUrl) {
+    avatarUrl = await FireBase.uploadPicture(getImgTypeAndString(avatarUrl));
+  }
   const { user } = await DBConnector.auth.createUserWithEmailAndPassword(
     email,
     password
