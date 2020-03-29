@@ -2,7 +2,6 @@ import { Response, Utils } from '../common';
 import { registerUser, authenticateUser } from './user-helper';
 import { jwt } from '../common/jwt';
 import { Response as IResponse } from 'express';
-// import { UserHelper } from './user-helper';
 
 export class UserController {
   static async authenticate(req, res, next) {
@@ -25,7 +24,7 @@ export class UserController {
         const response = Response.FireBase;
         response.message = {
           code: err.code,
-          message: err.message,
+          message: err.message
         };
         return next(response);
       }
@@ -35,19 +34,27 @@ export class UserController {
     }
   }
 
-  private static async common(res, userObj) {
+  private static async common(res: IResponse, userObj) {
     const userSnapshot = await userObj.get();
     const snapShotData = userSnapshot.data();
     const jwtData = {
       avatarUrl: snapShotData.avatarUrl,
       email: snapShotData.email,
       displayName: snapShotData.displayName,
+      uid: userSnapshot.id
     };
     const xUser = await jwt.generateJwtForUser(jwtData);
     res.cookie('auth', xUser, {
       httpOnly: true,
+      domain: 'localhost',
+      sameSite: 'lax'
     });
-    return xUser;
+    res.cookie('validToken', true, {
+      domain: 'localhost',
+      httpOnly: false,
+      sameSite: 'lax'
+    });
+    return jwtData;
   }
 
   static async register(req, res: IResponse, next) {
@@ -70,7 +77,7 @@ export class UserController {
         const response = Response.FireBase;
         response.message = {
           code: err.code,
-          message: err.message,
+          message: err.message
         };
         return next(response);
       }

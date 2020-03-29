@@ -6,20 +6,26 @@ import Spinner from "./components/spinner/spinner.component";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { GlobalStyle } from "./global.styles";
+import { selectCurrentUser } from "./redux/user/user.selectors";
+import { checkUserSession } from "./redux/user/user.actions";
 
-const HomePage = lazy(() => import("./pages/homepage/homepage.component"));
+const DashboardPage = lazy(() =>
+  import("./pages/dashboard/dashboard.component")
+);
 const SignInAndSignUpPage = lazy(() =>
   import("./pages/sign-in-and-sign-up/sign-in-and-sign-up.component")
 );
 
 class App extends React.Component {
+  unsubscribeFromAuth = null;
+
   componentDidMount() {
-    // const { checkUserSession } = this.props;
-    // checkUserSession();
+    const { checkUserSession } = this.props;
+    checkUserSession();
   }
 
   componentWillUnmount() {
-    // this.unsubscribeFromAuth();
+    this.unsubscribeFromAuth();
   }
   render() {
     return (
@@ -27,17 +33,27 @@ class App extends React.Component {
         <GlobalStyle />
         <Switch>
           <Suspense fallback={<Spinner />}>
+            {" "}
+            <Route
+              exact
+              path="/dashboard"
+              render={() =>
+                this.props.currentUser ? <DashboardPage /> : <ErrorBoundary />
+              }
+            />
             <Route
               exact
               path="/"
-              render={() => (
-                // this.props ? (
-                //   <Redirect to="/dashboard" />
-                // ) :
-                <SignInAndSignUpPage />
-              )}
+              render={() =>
+                this.props.currentUser ? (
+                  <Redirect to="/dashboard" />
+                ) : (
+                  <SignInAndSignUpPage />
+                )
+              }
             />
           </Suspense>
+          <Route path="*" component={ErrorBoundary} />
         </Switch>
       </div>
     );
@@ -45,36 +61,11 @@ class App extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  // currentUser: selectCurrentUser
+  currentUser: selectCurrentUser
 });
 
 const mapDispatchToProps = dispatch => ({
-  // checkUserSession: () => dispatch(checkUserSession())
+  checkUserSession: () => dispatch(checkUserSession())
 });
 
-export default connect(null, null)(App);
-// function App() {
-//   return (
-//     <div>
-//       <Switch>
-//         <ErrorBoundary>
-//           <Suspense fallback={<Spinner />}>
-//             <Route exact path="/" component={HomePage} />
-
-//             <Route
-//               exact
-//               path="/signin"
-//               render={() =>
-//                 this.props.currentUser ? (
-//                   <Redirect to="/" />
-//                 ) : (
-//                   <SignInAndSignUpPage />
-//                 )
-//               }
-//             />
-//           </Suspense>
-//         </ErrorBoundary>
-//       </Switch>
-//     </div>
-//   );
-// }
+export default connect(mapStateToProps, mapDispatchToProps)(App);

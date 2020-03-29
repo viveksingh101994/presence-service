@@ -7,7 +7,7 @@ import {
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
 import { connect } from "react-redux";
-
+import { emailSignInStart } from "../../redux/user/user.actions";
 class SignIn extends React.Component {
   constructor(props) {
     super(props);
@@ -60,4 +60,9 @@ class SignIn extends React.Component {
   }
 }
 
-export default connect(null, null)(SignIn);
+const mapDispatchToProps = dispatch => ({
+  emailSignInStart: (email, password) =>
+    dispatch(emailSignInStart({ email, password }))
+});
+
+export default connect(null, mapDispatchToProps)(SignIn);

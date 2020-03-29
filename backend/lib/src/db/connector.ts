@@ -36,9 +36,7 @@ export class FireBase {
       }
       let bufferStream = new stream.PassThrough();
       bufferStream.end(Buffer.from(base64, 'base64'));
-      // Retrieve default storage bucket
       let bucket = FireBase.storage;
-      // Create a reference to the new image file
       let file = bucket.file(`/avatars/${generateUUID()}.${imgType}`);
       bufferStream
         .pipe(
