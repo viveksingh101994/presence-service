@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: deepOrange[500]
   }
 }));
-export const PresenceComponent = ({ users }) => {
+const PresenceComponent = ({ users }) => {
   const classes = useStyles();
 
   return (
@@ -37,3 +37,5 @@ export const PresenceComponent = ({ users }) => {
     </AvatarGroup>
   );
 };
+
+export default PresenceComponent;
