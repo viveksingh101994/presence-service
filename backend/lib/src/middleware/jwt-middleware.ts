@@ -8,7 +8,7 @@ export class JWTMiddleware {
     if (req.cookies.auth) {
       try {
         const decoded: any = await jwt.verifyandDecodeJwt(req.cookies.auth);
-        req.user = decoded.context;
+        req.user = decoded;
         return next();
       } catch (err) {
         res.clearCookie('auth');

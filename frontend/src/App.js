@@ -24,9 +24,7 @@ class App extends React.Component {
     checkUserSession();
   }
 
-  componentWillUnmount() {
-    this.unsubscribeFromAuth();
-  }
+  componentWillUnmount() {}
   render() {
     return (
       <div>
@@ -38,7 +36,11 @@ class App extends React.Component {
               exact
               path="/dashboard"
               render={() =>
-                this.props.currentUser ? <DashboardPage /> : <ErrorBoundary />
+                this.props.currentUser ? (
+                  <DashboardPage user={this.props.currentUser.user} />
+                ) : (
+                  ""
+                )
               }
             />
             <Route
@@ -53,7 +55,7 @@ class App extends React.Component {
               }
             />
           </Suspense>
-          <Route path="*" component={ErrorBoundary} />
+          {/* <Route path="*" component={ErrorBoundary} /> */}
         </Switch>
       </div>
     );

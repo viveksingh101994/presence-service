@@ -1,26 +1,34 @@
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
-import { Response, Utils } from './common';
+import { Response } from './common';
+import * as http from 'http';
 import * as cors from 'cors';
+import * as io from 'socket.io';
 class App {
   app: express.Application;
   port: number;
-
+  private server: any;
   constructor(routes, port) {
     this.app = express();
+    this.server = http.createServer(this.app);
     this.port = port;
     this.initializeMiddlewares();
     this.initializeControllers(routes);
     this.initializeErrorHandler();
     this.initializeResponseHandler();
   }
-  listen() {
-    this.app.listen(this.port, () => {
+  serverListen() {
+    this.server.listen(this.port, () => {
       // tslint:disable-next-line:no-console
       console.log(`App listening on the port ${this.port}`);
     });
   }
+
+  setSocket() {
+    this.app.set('socketio', io(this.server));
+  }
+
   private initializeMiddlewares() {
     this.app.use(bodyParser.json());
     this.app.use(this.loggerMiddleware);
