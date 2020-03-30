@@ -14,3 +14,8 @@ export const setPresentUsersFailure = err => ({
   type: PresenceActionTypes.PRESENT_USERS_FAILURE,
   payload: err
 });
+
+export const setInitialUser = user => ({
+  type: PresenceActionTypes.SET_INITIAL_USER,
+  payload: user
+});

@@ -4,13 +4,16 @@ import {
   ErrorImageContainer,
   ErrorImageText
 } from "./error-boundary.styles";
+import { Link } from "react-router-dom";
 
 const ErrorBoundary = () => {
   return (
     <ErrorImageOverlay>
       <ErrorImageContainer imageUrl="https://i.imgur.com/g3hgqe8.png" />
       <ErrorImageText>
-        Sorry this page is Broken, Try to Login Again!!!
+        <Link to="/">
+          Sorry this page is Broken, Try to Login Again by clicking here!!!
+        </Link>
       </ErrorImageText>
     </ErrorImageOverlay>
   );

@@ -56,9 +56,10 @@ export function* onCheckUserSession() {
   yield takeLatest(UserActionTypes.CHECK_USER_SESSION, isUserAuthenticated);
 }
 
-export function* signOut() {
+export function* signOut({ payload }) {
   try {
     yield get(`${url}/api/public/logout`);
+    payload();
     yield put(signOutSuccess());
   } catch (err) {
     yield put(signOutFailure(err));

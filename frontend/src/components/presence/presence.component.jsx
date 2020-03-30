@@ -3,6 +3,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import { deepOrange } from "@material-ui/core/colors";
 import AvatarGroup from "@material-ui/lab/AvatarGroup";
+import { selectPresentUserList } from "../../redux/presence/presence.selectors";
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
+import { selectCurrentUser } from "../../redux/user/user.selectors";
+
 const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
@@ -15,12 +20,11 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: deepOrange[500]
   }
 }));
-const PresenceComponent = ({ users }) => {
+const PresenceComponent = ({ userList }) => {
   const classes = useStyles();
-
   return (
     <AvatarGroup max={3}>
-      {users.map(element => {
+      {userList.map(element => {
         const { displayName, avatarUrl, uid, email } = element;
         return (
           <Avatar
@@ -38,4 +42,8 @@ const PresenceComponent = ({ users }) => {
   );
 };
 
-export default PresenceComponent;
+const mapStateToProps = createStructuredSelector({
+  userList: selectPresentUserList
+});
+
+export default connect(mapStateToProps)(PresenceComponent);

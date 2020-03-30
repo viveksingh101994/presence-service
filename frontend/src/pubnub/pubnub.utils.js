@@ -26,14 +26,16 @@ export default class PubNubHelper {
           includeUUIDs: true
         },
         (status, response) => {
-          if (
+          if (status.error) {
+            reject({ status, response });
+          } else if (
             response &&
             response.totalOccupancy &&
             response.totalOccupancy > 1
           ) {
             resolve(response.channels[this.channel].occupants);
           } else {
-            reject();
+            resolve(null);
           }
         }
       );
@@ -45,7 +47,7 @@ export default class PubNubHelper {
   }
 
   unsubscribeHelper() {
-    this.pubnub.unsubscribeHelper({
+    this.pubnub.unsubscribe({
       channels: this.channels
     });
   }

@@ -1,19 +1,20 @@
 import React, { lazy, Suspense } from "react";
 import "./App.css";
 import { Switch, Route, Redirect } from "react-router-dom";
-import ErrorBoundary from "./components/error-boundary/error-boundary.component";
 import Spinner from "./components/spinner/spinner.component";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { GlobalStyle } from "./global.styles";
 import { selectCurrentUser } from "./redux/user/user.selectors";
 import { checkUserSession } from "./redux/user/user.actions";
+import NavBarComponent from "./components/navbar/navbar.component";
 
-const DashboardPage = lazy(() =>
-  import("./pages/dashboard/dashboard.component")
-);
+const DashboardPage = lazy(() => import("./pages/avatar/avatar.component"));
 const SignInAndSignUpPage = lazy(() =>
   import("./pages/sign-in-and-sign-up/sign-in-and-sign-up.component")
+);
+const ErrorBoundary = lazy(() =>
+  import("./components/error-boundary/error-boundary.component")
 );
 
 class App extends React.Component {
@@ -29,23 +30,24 @@ class App extends React.Component {
     return (
       <div>
         <GlobalStyle />
+        <NavBarComponent />
+
         <Switch>
           <Suspense fallback={<Spinner />}>
-            {" "}
             <Route
-              exact
               path="/dashboard"
+              exact
               render={() =>
                 this.props.currentUser ? (
                   <DashboardPage user={this.props.currentUser.user} />
                 ) : (
-                  ""
+                  <ErrorBoundary />
                 )
               }
             />
             <Route
-              exact
               path="/"
+              exact
               render={() =>
                 this.props.currentUser ? (
                   <Redirect to="/dashboard" />
@@ -55,7 +57,6 @@ class App extends React.Component {
               }
             />
           </Suspense>
-          {/* <Route path="*" component={ErrorBoundary} /> */}
         </Switch>
       </div>
     );

@@ -1,38 +1,31 @@
 import React, { Component } from "react";
 import { PubNubProvider } from "pubnub-react";
-import { post } from "../../axios/axios.utiils";
-import { url } from "../../global.config";
 import PresenceComponent from "../../components/presence/presence.component";
 import PubNubHelper from "../../pubnub/pubnub.utils";
+import {
+  getPresentUsersStart,
+  setInitialUser
+} from "../../redux/presence/presence.actions";
+import { connect } from "react-redux";
 
-export default class DashBoardComponent extends Component {
-  constructor(props) {
-    super(props);
-    const { user } = this.props;
-    this.state = {
-      users: [user]
-    };
-  }
-
+class AvatarComponent extends Component {
   checkHereNow = async () => {
     try {
-      const { user } = this.props;
+      const { user, roomUserList } = this.props;
       const occupants = await this.pubnub.checkHereNow();
-      const userList = occupants
-        .filter(x => x.uuid !== user.uid)
-        .map(x => x.uuid);
-      const rooms = await post(`${url}/api/v1/room-user`, {
-        users: userList
-      });
-      this.setState({
-        users: rooms.data
-      });
+      if (occupants) {
+        const userList = occupants
+          .filter(x => x.uuid !== user.uid)
+          .map(x => x.uuid);
+        roomUserList(userList);
+      }
     } catch (err) {
       console.log("Something went wrong");
     }
   };
 
   componentWillMount() {
+    this.props.setUserList(this.props);
     this.initPubnubServices();
   }
 
@@ -47,15 +40,22 @@ export default class DashBoardComponent extends Component {
   }
 
   componentWillUnmount() {
-    this.pubnub.unsubscribeHelper();
+    if (this.pubnub) this.pubnub.unsubscribeHelper();
   }
 
   render() {
-    const { users } = this.state;
+    console.log(this.props.user);
     return (
       <PubNubProvider client={this.pubnub}>
-        <PresenceComponent users={users} />
+        <PresenceComponent user={this.props.user} />
       </PubNubProvider>
     );
   }
 }
+
+const mapDispatchToProps = dispatch => ({
+  setUserList: user => dispatch(setInitialUser(user)),
+  roomUserList: userList => dispatch(getPresentUsersStart(userList))
+});
+
+export default connect(null, mapDispatchToProps)(AvatarComponent);

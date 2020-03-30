@@ -13,11 +13,11 @@ export class ProfileController {
 
   static async room(req, res, next) {
     try {
-      const { users = null } = req.body;
-      if (!users) {
+      const { payload = null } = req.body;
+      if (!payload) {
         return next(Response.InvalidParam);
       }
-      const roomUsers = await getUsers(users);
+      const roomUsers = await getUsers(payload);
       const successResponse = Response.Success;
       successResponse.message = [req.user, ...roomUsers];
       return next(successResponse);
