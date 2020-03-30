@@ -8,7 +8,13 @@ const router = express.Router();
 router.get(
   Utils.getRoutePrefix(RouteType.private, '/user'),
   JWTMiddleware.verify,
-  ProfileController.users
+  ProfileController.user
+);
+
+router.post(
+  Utils.getRoutePrefix(RouteType.private, '/room-user'),
+  JWTMiddleware.verify,
+  ProfileController.room
 );
 
 export const profileRoutes = router;

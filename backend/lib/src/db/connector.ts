@@ -21,7 +21,7 @@ export class FireBase {
   static initConnection() {
     admin.initializeApp({
       credential: admin.credential.applicationDefault(),
-      storageBucket: firebaseConfig.storageBucket,
+      storageBucket: firebaseConfig.storageBucket
     });
 
     this.storage = admin.storage().bucket();
@@ -42,8 +42,8 @@ export class FireBase {
         .pipe(
           file.createWriteStream({
             metadata: {
-              contentType: `image/${imgType}`,
-            },
+              contentType: `image/${imgType}`
+            }
           })
         )
         .on('error', (error) => {
@@ -57,7 +57,7 @@ export class FireBase {
           file.getSignedUrl(
             {
               action: 'read',
-              expires: '03-01-2500',
+              expires: '03-01-2500'
             },
             (error, url) => {
               if (error) {
