@@ -4,6 +4,11 @@ import { jwt } from '../common/jwt';
 import { Response as IResponse } from 'express';
 
 export class UserController {
+  static logOut(req, res: IResponse, next) {
+    res.clearCookie('auth');
+    res.clearCookie('validToken');
+    return next(Response.Success);
+  }
   static async authenticate(req, res, next) {
     const user = req.body.payload;
     try {

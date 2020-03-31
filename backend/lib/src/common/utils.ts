@@ -63,7 +63,7 @@ export const Utils = {
       break;
     }
     return parsed;
-  },
+  }
 };
 
 export const getImgTypeAndString = (avatarUrl: string): { imgType; base64 } => {

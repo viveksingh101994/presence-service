@@ -12,7 +12,15 @@ const createUserProfileDocument = async (userAuth, additionalData) => {
       await userRef.set({
         email,
         createdAt,
-        ...additionalData,
+        ...additionalData
+      });
+    } catch (err) {
+      console.log('error creating user', err.message);
+    }
+  } else {
+    try {
+      await userRef.update({
+        ...additionalData
       });
     } catch (err) {
       console.log('error creating user', err.message);
@@ -38,5 +46,11 @@ export const authenticateUser = async ({ email, password }) => {
     email,
     password
   );
-  return createUserProfileDocument(userData.user, null);
+  return createUserProfileDocument(userData.user, {
+    lastLogin: new Date().toString()
+  });
+};
+
+export const updateUserProfile = async (user, additionalData) => {
+  return createUserProfileDocument(user, additionalData);
 };

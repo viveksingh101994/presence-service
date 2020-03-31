@@ -15,4 +15,9 @@ router.post(
   UserController.register
 );
 
+router.get(
+  Utils.getRoutePrefix(RouteType.public, '/logout'),
+  UserController.logOut
+);
+
 export const userRoutes = router;

@@ -17,4 +17,10 @@ router.post(
   ProfileController.room
 );
 
+router.get(
+  Utils.getRoutePrefix(RouteType.private, '/visted-users'),
+  JWTMiddleware.verify,
+  ProfileController.visitedUser
+);
+
 export const profileRoutes = router;
