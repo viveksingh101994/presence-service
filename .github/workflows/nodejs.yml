@@ -23,8 +23,12 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - working-directory: ./backend
-    - run: npm install
-    - run: npm run test:prettier
-    - run: npm run test:tslint
-    - run: npm test
+    - name: Install dependencies
+      working-directory: backend
+      run: npm install
+    - name: Run prettier test
+      working-directory: backend
+      run: npm run test:prettier
+    - name: Run TSLINT test
+      working-directory: backend
+      run: npm run test:tslint
