@@ -7,12 +7,13 @@ const INITIAL_STATE = {
 
 const presenceReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case PresenceActionTypes.SET_INITIAL_USER: {
+    case PresenceActionTypes.SET_INITIAL_USER:
       return {
         ...state,
-        currentPresentUser: [action.payload.user]
+        currentPresentUser: Array.isArray(action.payload.user)
+          ? action.payload.user
+          : [action.payload.user]
       };
-    }
 
     case PresenceActionTypes.GET_PRESENT_USERS_START:
       return {
@@ -21,7 +22,7 @@ const presenceReducer = (state = INITIAL_STATE, action) => {
     case PresenceActionTypes.GET_PRESENT_USERS_SUCCESS:
       return {
         ...state,
-        currentPresentUser: action.payload.user,
+        currentPresentUser: [...action.payload.user],
         error: null
       };
     default:

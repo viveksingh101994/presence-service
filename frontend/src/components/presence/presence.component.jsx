@@ -6,7 +6,6 @@ import AvatarGroup from "@material-ui/lab/AvatarGroup";
 import { selectPresentUserList } from "../../redux/presence/presence.selectors";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
-import { selectCurrentUser } from "../../redux/user/user.selectors";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,6 +25,7 @@ const PresenceComponent = ({ userList }) => {
     <AvatarGroup max={3}>
       {userList.map(element => {
         const { displayName, avatarUrl, uid, email } = element;
+        console.log(element);
         return (
           <Avatar
             alt={displayName}

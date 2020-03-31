@@ -27,7 +27,6 @@ const useStyles = makeStyles(theme => ({
 
 const NavBarComponent = ({ currentUser, signOutStart, history }) => {
   const classes = useStyles();
-  debugger;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleMenu = event => {
@@ -43,7 +42,6 @@ const NavBarComponent = ({ currentUser, signOutStart, history }) => {
   const handleSignout = () => {
     signOutStart(routeBackToLogin);
   };
-
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -77,7 +75,7 @@ const NavBarComponent = ({ currentUser, signOutStart, history }) => {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem>{currentUser.user.email}</MenuItem>
+                <MenuItem>{currentUser.email}</MenuItem>
                 <MenuItem onClick={handleSignout}>Signout</MenuItem>
               </Menu>
             </div>

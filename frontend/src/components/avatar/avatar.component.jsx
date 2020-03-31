@@ -1,17 +1,27 @@
 import React, { Component } from "react";
 import { PubNubProvider } from "pubnub-react";
-import PresenceComponent from "../../components/presence/presence.component";
+import PresenceComponent from "../presence/presence.component";
 import PubNubHelper from "../../pubnub/pubnub.utils";
 import {
   getPresentUsersStart,
   setInitialUser
 } from "../../redux/presence/presence.actions";
 import { connect } from "react-redux";
+import { selectCurrentUser } from "../../redux/user/user.selectors";
+import { createStructuredSelector } from "reselect";
 
 class AvatarComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.props.setUserList(this.props.currentUser);
+    this.initPubnubServices();
+  }
   checkHereNow = async () => {
     try {
-      const { user, roomUserList } = this.props;
+      const {
+        currentUser: { user },
+        roomUserList
+      } = this.props;
       const occupants = await this.pubnub.checkHereNow();
       if (occupants) {
         const userList = occupants
@@ -24,13 +34,10 @@ class AvatarComponent extends Component {
     }
   };
 
-  componentWillMount() {
-    this.props.setUserList(this.props);
-    this.initPubnubServices();
-  }
-
   initPubnubServices() {
-    const { user } = this.props;
+    const {
+      currentUser: { user }
+    } = this.props;
     this.pubnub = new PubNubHelper(user.uid);
     this.pubnub.subscribeInitiater();
     this.pubnub.addListenerHelper({
@@ -44,10 +51,9 @@ class AvatarComponent extends Component {
   }
 
   render() {
-    console.log(this.props.user);
     return (
       <PubNubProvider client={this.pubnub}>
-        <PresenceComponent user={this.props.user} />
+        <PresenceComponent />
       </PubNubProvider>
     );
   }
@@ -58,4 +64,8 @@ const mapDispatchToProps = dispatch => ({
   roomUserList: userList => dispatch(getPresentUsersStart(userList))
 });
 
-export default connect(null, mapDispatchToProps)(AvatarComponent);
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AvatarComponent);

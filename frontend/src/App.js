@@ -9,7 +9,9 @@ import { selectCurrentUser } from "./redux/user/user.selectors";
 import { checkUserSession } from "./redux/user/user.actions";
 import NavBarComponent from "./components/navbar/navbar.component";
 
-const DashboardPage = lazy(() => import("./pages/avatar/avatar.component"));
+const DashboardPage = lazy(() =>
+  import("./pages/dashboard/dashboard.component")
+);
 const SignInAndSignUpPage = lazy(() =>
   import("./pages/sign-in-and-sign-up/sign-in-and-sign-up.component")
 );
@@ -38,11 +40,7 @@ class App extends React.Component {
               path="/dashboard"
               exact
               render={() =>
-                this.props.currentUser ? (
-                  <DashboardPage user={this.props.currentUser.user} />
-                ) : (
-                  <ErrorBoundary />
-                )
+                this.props.currentUser ? <DashboardPage /> : <ErrorBoundary />
               }
             />
             <Route
