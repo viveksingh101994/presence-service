@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "build:w": "tsc -w",
-    "start": "npm run build && node dist/lib/src/server.js",
+    "start": "node dist/lib/src/server.js",
     "test:unit:nocoverage": "NODE_ENV=test mocha --opts mocha_unit.opts",
     "test:unit": "NODE_ENV=test nyc mocha --opts mocha_unit.opts",
     "test:tslint": "tslint  --project tsconfig.json",
