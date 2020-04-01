@@ -1,4 +1,4 @@
-const url = process.env.SERVER_URL || "http://localhost:5000";
+const url = process.env.SERVER_URL || '';
 
 const roomUserUrl = () => {
   return `${url}/api/v1/room-user`;
