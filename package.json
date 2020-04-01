@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "build:w": "tsc -w",
-    "start": "npm run build && node dist/lib/src/index.js",
+    "start": "node dist/server.js",
     "test:unit:nocoverage": "NODE_ENV=test mocha --opts mocha_unit.opts",
     "test:unit": "NODE_ENV=test nyc mocha --opts mocha_unit.opts",
     "test:tslint": "tslint  --project tsconfig.json",
@@ -16,7 +16,8 @@
     "clean": "rm -rf node_modules dist coverage",
     "coverage": "nyc report",
     "test": "mocha --opts mocha_unit.opts",
-    "test:coverage": "nyc check-coverage --lines 0 --functions 0 --branches 0 --statements 0"
+    "test:coverage": "nyc check-coverage --lines 0 --functions 0 --branches 0 --statements 0",
+    "heroku-postbuild": "npm install && npm run build && cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "nyc": {
     "include": [

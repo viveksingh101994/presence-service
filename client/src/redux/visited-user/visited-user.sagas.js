@@ -1,7 +1,7 @@
 import { takeLatest, put, all, call } from "redux-saga/effects";
 import { VisitedUserTypes } from "./visited-user.types";
 import { get } from "../../axios/axios.utiils";
-import { url } from "../../global.config";
+import { visitedUsersUrl } from "../../global.config";
 import { cookies } from "../../cookie/cookie.name";
 import { getCookie } from "../../cookie/cookie.util";
 import {
@@ -17,7 +17,7 @@ export function* onGetVisitedUsersStart() {
 export function* getVisitedUsers() {
   try {
     if (getCookie(cookies.validToken) === "true") {
-      const userData = yield get(`${url}/api/v1/visted-users`);
+      const userData = yield get(visitedUsersUrl());
       yield put(visitedUserSuccess({ user: userData.data }));
     } else {
       yield put(signOutSuccess());

@@ -7,7 +7,6 @@ async function initService() {
     await FireBase.initConnection();
     const app = new App([routes], process.env.PORT || '3000');
     app.serverListen();
-    app.setSocket();
   } catch (err) {
     console.log('Some Error Occured', err);
     process.exit(1);

@@ -9,7 +9,12 @@ import {
 } from "./user.actions";
 import { UserActionTypes } from "./user.types";
 import { get, post } from "../../axios/axios.utiils";
-import { url } from "../../global.config";
+import {
+  authenticateUrl,
+  userUrl,
+  logoutUrl,
+  registerUrl
+} from "../../global.config";
 import { getCookie } from "../../cookie/cookie.util";
 import { cookies } from "../../cookie/cookie.name";
 
@@ -23,7 +28,7 @@ export function* getValidToken(userAuth) {
 
 export function* signInWithEmail(payload) {
   try {
-    const { data } = yield post(`${url}/api/public/authenticate`, payload);
+    const { data } = yield post(authenticateUrl(), payload);
     yield put(SignInSuccess({ user: data }));
   } catch (err) {
     yield put(SignInFailure(err));
@@ -35,7 +40,7 @@ export function* onEmailSignInStart() {
 }
 
 function getCurrentUser() {
-  return get(`${url}/api/v1/user`);
+  return get(userUrl());
 }
 
 export function* isUserAuthenticated() {
@@ -58,7 +63,7 @@ export function* onCheckUserSession() {
 
 export function* signOut({ payload }) {
   try {
-    yield get(`${url}/api/public/logout`);
+    yield get(logoutUrl());
     payload();
     yield put(signOutSuccess());
   } catch (err) {
@@ -72,7 +77,7 @@ export function* onSignOutStart() {
 
 export function* signUp({ payload }) {
   try {
-    const userData = yield post(`${url}/api/public/register`, { payload });
+    const userData = yield post(registerUrl(), { payload });
     yield put(signUpSuccess({ user: userData.data }));
   } catch (err) {
     yield put(signUpFailure(err));

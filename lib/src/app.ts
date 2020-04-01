@@ -4,7 +4,7 @@ import * as express from 'express';
 import { Response } from './common';
 import * as http from 'http';
 import * as cors from 'cors';
-import * as io from 'socket.io';
+import * as path from 'path';
 class App {
   app: express.Application;
   port: number;
@@ -15,6 +15,7 @@ class App {
     this.port = port;
     this.initializeMiddlewares();
     this.initializeControllers(routes);
+    this.initializeClient(routes);
     this.initializeErrorHandler();
     this.initializeResponseHandler();
   }
@@ -23,10 +24,6 @@ class App {
       // tslint:disable-next-line:no-console
       console.log(`App listening on the port ${this.port}`);
     });
-  }
-
-  setSocket() {
-    this.app.set('socketio', io(this.server));
   }
 
   private initializeMiddlewares() {
@@ -40,7 +37,7 @@ class App {
     );
     this.app.use(
       cors({
-        origin: 'http://localhost:3000',
+        origin: 'https://presence-detection.herokuapp.com/',
         credentials: true
       })
     );
@@ -51,6 +48,15 @@ class App {
     routes.forEach((route) => {
       this.app.use(route);
     });
+  }
+
+  private initializeClient(routes) {
+    if (process.env.NODE_ENV === 'production') {
+      this.app.use(express.static(path.join(__dirname, '../client/build')));
+      this.app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+      });
+    }
   }
 
   private loggerMiddleware(

@@ -20,7 +20,11 @@ export class FireBase {
   static storage: any;
   static initConnection() {
     admin.initializeApp({
-      credential: admin.credential.applicationDefault(),
+      credential: admin.credential.cert({
+        clientEmail: firebaseConfig.clientEmail,
+        privateKey: firebaseConfig.privatekey,
+        projectId: firebaseConfig.projectId
+      }),
       storageBucket: firebaseConfig.storageBucket
     });
 

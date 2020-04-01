@@ -51,11 +51,9 @@ export class UserController {
     const xUser = await jwt.generateJwtForUser(jwtData);
     res.cookie('auth', xUser, {
       httpOnly: true,
-      domain: 'localhost',
       sameSite: 'lax'
     });
     res.cookie('validToken', true, {
-      domain: 'localhost',
       httpOnly: false,
       sameSite: 'lax'
     });
