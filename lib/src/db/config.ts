@@ -7,6 +7,6 @@ export const firebaseConfig = {
   messagingSenderId: process.env.MESSAGING_SENDER_ID,
   appId: process.env.APP_ID,
   measurementId: process.env.MEASUREMENTID,
-  privatekey: process.env.FIREBASE_PRIVATE_KEY,
+  privatekey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
   clientEmail: process.env.FIREBASE_CLIENT_EMAIL
 };
