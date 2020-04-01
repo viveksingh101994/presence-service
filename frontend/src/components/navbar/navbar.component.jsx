@@ -4,7 +4,6 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { selectCurrentUser } from "../../redux/user/user.selectors";
@@ -12,6 +11,8 @@ import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { signOutStart } from "../../redux/user/user.actions";
 import { withRouter } from "react-router";
+import { Avatar } from "@material-ui/core";
+import { deepOrange } from "@material-ui/core/colors";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,6 +23,10 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     flexGrow: 1
+  },
+  orange: {
+    color: theme.palette.getContrastText(deepOrange[500]),
+    backgroundColor: deepOrange[500]
   }
 }));
 
@@ -38,7 +43,6 @@ const NavBarComponent = ({ currentUser, signOutStart, history }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   const handleSignout = () => {
     signOutStart(routeBackToLogin);
   };
@@ -51,6 +55,7 @@ const NavBarComponent = ({ currentUser, signOutStart, history }) => {
           </Typography>
           {currentUser && (
             <div>
+              {currentUser.user.email}
               <IconButton
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
@@ -58,7 +63,13 @@ const NavBarComponent = ({ currentUser, signOutStart, history }) => {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <AccountCircle />
+                <Avatar
+                  alt={currentUser.user.displayName}
+                  src={currentUser.user.avatarUrl}
+                  className={classes.orange}
+                >
+                  {currentUser.user.displayName[0].toUpperCase()}
+                </Avatar>
               </IconButton>
               <Menu
                 id="menu-appbar"
@@ -75,7 +86,6 @@ const NavBarComponent = ({ currentUser, signOutStart, history }) => {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem>{currentUser.email}</MenuItem>
                 <MenuItem onClick={handleSignout}>Signout</MenuItem>
               </Menu>
             </div>

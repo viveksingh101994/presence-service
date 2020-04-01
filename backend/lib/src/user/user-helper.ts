@@ -38,7 +38,11 @@ export const registerUser = async (userData: Profile) => {
     email,
     password
   );
-  return createUserProfileDocument(user, { displayName, avatarUrl });
+  return createUserProfileDocument(user, {
+    displayName,
+    avatarUrl,
+    lastLogin: new Date().toString()
+  });
 };
 
 export const authenticateUser = async ({ email, password }) => {

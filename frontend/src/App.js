@@ -8,6 +8,7 @@ import { GlobalStyle } from "./global.styles";
 import { selectCurrentUser } from "./redux/user/user.selectors";
 import { checkUserSession } from "./redux/user/user.actions";
 import NavBarComponent from "./components/navbar/navbar.component";
+import Container from "@material-ui/core/Container";
 
 const DashboardPage = lazy(() =>
   import("./pages/dashboard/dashboard.component")
@@ -30,33 +31,34 @@ class App extends React.Component {
   componentWillUnmount() {}
   render() {
     return (
-      <div>
+      <React.Fragment>
         <GlobalStyle />
         <NavBarComponent />
-
-        <Switch>
-          <Suspense fallback={<Spinner />}>
-            <Route
-              path="/dashboard"
-              exact
-              render={() =>
-                this.props.currentUser ? <DashboardPage /> : <ErrorBoundary />
-              }
-            />
-            <Route
-              path="/"
-              exact
-              render={() =>
-                this.props.currentUser ? (
-                  <Redirect to="/dashboard" />
-                ) : (
-                  <SignInAndSignUpPage />
-                )
-              }
-            />
-          </Suspense>
-        </Switch>
-      </div>
+        <Container fixed>
+          <Switch>
+            <Suspense fallback={<Spinner />}>
+              <Route
+                path="/dashboard"
+                exact
+                render={() =>
+                  this.props.currentUser ? <DashboardPage /> : <ErrorBoundary />
+                }
+              />
+              <Route
+                path="/"
+                exact
+                render={() =>
+                  this.props.currentUser ? (
+                    <Redirect to="/dashboard" />
+                  ) : (
+                    <SignInAndSignUpPage />
+                  )
+                }
+              />
+            </Suspense>
+          </Switch>
+        </Container>
+      </React.Fragment>
     );
   }
 }

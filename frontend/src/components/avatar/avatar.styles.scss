@@ -1,0 +1,12 @@
+.avatar-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.paper-container {
+  margin-top: 2%;
+  margin-bottom: 2%;
+  &:first-child {
+    padding-left: 1%;
+  }
+}

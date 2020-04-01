@@ -12,7 +12,6 @@ const visiterUsersReducer = (state = INITIAL_STATE, action) => {
         ...state
       };
     case VisitedUserTypes.GET_VISITED_USER_SUCCESS:
-      debugger;
       return {
         ...state,
         visitedUsers: action.payload.user,

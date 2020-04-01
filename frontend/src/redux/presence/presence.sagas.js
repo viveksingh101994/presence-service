@@ -14,8 +14,13 @@ export function* onGetPresentUsersStart() {
 export function* getUserPresent({ payload }) {
   try {
     if (getCookie(cookies.validToken) === "true") {
-      const userData = yield post(`${url}/api/v1/room-user`, { payload });
-      yield put(userPresentSuccess({ user: userData.data }));
+      const userList = payload.occupants
+        .filter(x => x.uuid !== payload.user.uid)
+        .map(x => x.uuid);
+      const userData = yield post(`${url}/api/v1/room-user`, {
+        payload: userList
+      });
+      yield put(userPresentSuccess({ user: [payload.user, ...userData.data] }));
     } else {
       yield put(clearStates("token invalid"));
     }

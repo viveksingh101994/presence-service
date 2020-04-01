@@ -8,7 +8,7 @@ import visiterUsersReducer from "./visited-user/visited-user.reducer";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["userList"]
+  whitelist: [""]
 };
 
 const appReducer = combineReducers({

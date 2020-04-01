@@ -9,13 +9,15 @@ import {
 import { connect } from "react-redux";
 import { selectCurrentUser } from "../../redux/user/user.selectors";
 import { createStructuredSelector } from "reselect";
-
+import "./avatar.styles.scss";
+import { Paper } from "@material-ui/core";
 class AvatarComponent extends Component {
   constructor(props) {
     super(props);
     this.props.setUserList(this.props.currentUser);
     this.initPubnubServices();
   }
+
   checkHereNow = async () => {
     try {
       const {
@@ -24,10 +26,7 @@ class AvatarComponent extends Component {
       } = this.props;
       const occupants = await this.pubnub.checkHereNow();
       if (occupants) {
-        const userList = occupants
-          .filter(x => x.uuid !== user.uid)
-          .map(x => x.uuid);
-        roomUserList(userList);
+        roomUserList({ occupants, user });
       }
     } catch (err) {
       console.log("Something went wrong");
@@ -53,7 +52,16 @@ class AvatarComponent extends Component {
   render() {
     return (
       <PubNubProvider client={this.pubnub}>
-        <PresenceComponent />
+        {this.props.currentUser.user ? (
+          <Paper elevation={3} className="paper-container">
+            <div>
+              <h1>Active User</h1>
+              <div className="avatar-container">
+                <PresenceComponent />
+              </div>
+            </div>
+          </Paper>
+        ) : null}
       </PubNubProvider>
     );
   }

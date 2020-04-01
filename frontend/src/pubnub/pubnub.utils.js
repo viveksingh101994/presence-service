@@ -1,7 +1,7 @@
 import PubNub from "pubnub";
 
 export default class PubNubHelper {
-  channel = "postman-local";
+  channel = "postman-local12";
   channels = [this.channel];
   constructor(uuid) {
     this.pubnub = new PubNub({

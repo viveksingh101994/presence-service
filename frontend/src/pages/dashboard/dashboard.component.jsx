@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectVisitedUserList } from "../../redux/visited-user/visited-user.selectors";
 import { getVisitedUsersStart } from "../../redux/visited-user/visited-user.actions";
-
 class DashboardComponent extends Component {
   componentDidMount() {
     const { visitedUserList } = this.props;
