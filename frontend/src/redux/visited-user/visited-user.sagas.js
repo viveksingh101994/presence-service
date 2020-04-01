@@ -8,7 +8,7 @@ import {
   visitedUserSuccess,
   visitedUsersFailure
 } from "./visited-user.actions";
-import { clearStates } from "../user/user.sagas";
+import { signOutSuccess } from "../user/user.actions";
 
 export function* onGetVisitedUsersStart() {
   yield takeLatest(VisitedUserTypes.GET_VISITED_USER_START, getVisitedUsers);
@@ -20,7 +20,7 @@ export function* getVisitedUsers() {
       const userData = yield get(`${url}/api/v1/visted-users`);
       yield put(visitedUserSuccess({ user: userData.data }));
     } else {
-      yield put(clearStates("token invalid"));
+      yield put(signOutSuccess());
     }
   } catch (err) {
     yield put(visitedUsersFailure(err));

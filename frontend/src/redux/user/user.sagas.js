@@ -17,7 +17,7 @@ export function* getValidToken(userAuth) {
   if (getCookie(cookies.validToken) === "true") {
     yield put(SignInSuccess({ user: userAuth }));
   } else {
-    yield put(clearStates("token invalid"));
+    yield put(signOutSuccess());
   }
 }
 
@@ -45,7 +45,7 @@ export function* isUserAuthenticated() {
       if (!data) return;
       yield put(SignInSuccess({ user: data }));
     } else {
-      yield put(clearStates("token invalid"));
+      yield put(SignInFailure(new Error("login invalid")));
     }
   } catch (err) {
     yield put(SignInFailure(err));
@@ -89,10 +89,6 @@ export function* signInAfterSignUp({ payload: { user } }) {
 
 export function* onSignUpStart() {
   yield takeLatest(UserActionTypes.SIGN_UP_START, signUp);
-}
-
-export function* clearStates() {
-  yield takeLatest("");
 }
 
 export function* userSagas() {

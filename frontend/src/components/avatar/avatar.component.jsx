@@ -55,7 +55,7 @@ class AvatarComponent extends Component {
         {this.props.currentUser.user ? (
           <Paper elevation={3} className="paper-container">
             <div>
-              <h1>Active User</h1>
+              <h1>Active Users</h1>
               <div className="avatar-container">
                 <PresenceComponent />
               </div>

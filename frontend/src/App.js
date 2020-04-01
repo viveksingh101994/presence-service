@@ -5,7 +5,11 @@ import Spinner from "./components/spinner/spinner.component";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { GlobalStyle } from "./global.styles";
-import { selectCurrentUser } from "./redux/user/user.selectors";
+import {
+  selectCurrentUser,
+  selectIsUserSessionAvailable,
+  selectIsError
+} from "./redux/user/user.selectors";
 import { checkUserSession } from "./redux/user/user.actions";
 import NavBarComponent from "./components/navbar/navbar.component";
 import Container from "@material-ui/core/Container";
@@ -28,6 +32,18 @@ class App extends React.Component {
     checkUserSession();
   }
 
+  getDashboardComponent = () => {
+    if (this.props.isError instanceof Error) {
+      return <ErrorBoundary />;
+    }
+    if (this.props.isLoading) {
+      return <Spinner />;
+    }
+    if (this.props.currentUser) {
+      return <DashboardPage />;
+    }
+  };
+
   componentWillUnmount() {}
   render() {
     return (
@@ -40,9 +56,7 @@ class App extends React.Component {
               <Route
                 path="/dashboard"
                 exact
-                render={() =>
-                  this.props.currentUser ? <DashboardPage /> : <ErrorBoundary />
-                }
+                render={this.getDashboardComponent}
               />
               <Route
                 path="/"
@@ -64,7 +78,9 @@ class App extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser
+  currentUser: selectCurrentUser,
+  isLoading: selectIsUserSessionAvailable,
+  isError: selectIsError
 });
 
 const mapDispatchToProps = dispatch => ({

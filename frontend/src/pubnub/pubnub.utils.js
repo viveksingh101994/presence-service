@@ -1,7 +1,7 @@
 import PubNub from "pubnub";
 
 export default class PubNubHelper {
-  channel = "postman-local12";
+  channel = "postman-local";
   channels = [this.channel];
   constructor(uuid) {
     this.pubnub = new PubNub({
@@ -28,11 +28,7 @@ export default class PubNubHelper {
         (status, response) => {
           if (status.error) {
             reject({ status, response });
-          } else if (
-            response &&
-            response.totalOccupancy &&
-            response.totalOccupancy > 1
-          ) {
+          } else if (response && response.totalOccupancy) {
             resolve(response.channels[this.channel].occupants);
           } else {
             resolve(null);
