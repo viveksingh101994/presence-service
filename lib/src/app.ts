@@ -37,7 +37,7 @@ class App {
     );
     this.app.use(
       cors({
-        origin: 'http://localhost:3000',
+        origin: 'https://presence-detection.herokuapp.com/',
         credentials: true
       })
     );
