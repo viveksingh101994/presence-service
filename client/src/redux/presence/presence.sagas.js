@@ -1,7 +1,7 @@
 import { takeLatest, put, all, call } from "redux-saga/effects";
 import { PresenceActionTypes } from "./presence.types";
 import { post } from "../../axios/axios.utiils";
-import { url } from "../../global.config";
+import { roomUserUrl } from "../../global.config";
 import { cookies } from "../../cookie/cookie.name";
 import { getCookie } from "../../cookie/cookie.util";
 import { userPresentSuccess, setPresentUsersFailure } from "./presence.actions";
@@ -20,7 +20,7 @@ export function* getUserPresent({ payload }) {
       const userList = payload.occupants
         .filter(x => x.uuid !== payload.user.uid)
         .map(x => x.uuid);
-      const userData = yield post(`${url}/api/v1/room-user`, {
+      const userData = yield post(roomUserUrl(), {
         payload: userList
       });
       yield put(userPresentSuccess({ user: [payload.user, ...userData.data] }));
