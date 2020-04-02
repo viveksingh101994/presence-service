@@ -5,6 +5,7 @@ import { Response } from './common';
 import * as http from 'http';
 import * as cors from 'cors';
 import * as path from 'path';
+import { corsSettings } from './db/config';
 class App {
   app: express.Application;
   port: number;
@@ -37,7 +38,7 @@ class App {
     );
     this.app.use(
       cors({
-        origin: 'https://presence-detection.herokuapp.com/',
+        origin: corsSettings.origin,
         credentials: true
       })
     );

@@ -1,20 +1,24 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
-import { selectCurrentUser } from "../../redux/user/user.selectors";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
-import { signOutStart } from "../../redux/user/user.actions";
-import { withRouter } from "react-router";
-import { Avatar } from "@material-ui/core";
-import { deepOrange } from "@material-ui/core/colors";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import {
+  selectCurrentUser,
+  selectIsUserSessionAvailable
+} from '../../redux/user/user.selectors';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { signOutStart } from '../../redux/user/user.actions';
+import { withRouter } from 'react-router';
+import { Avatar } from '@material-ui/core';
+import { deepOrange } from '@material-ui/core/colors';
+import './navbar.component.scss';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1
   },
@@ -30,15 +34,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const NavBarComponent = ({ currentUser, signOutStart, history }) => {
+const NavBarComponent = ({ currentUser, signOutStart, history, isLoading }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const handleMenu = event => {
+  const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const routeBackToLogin = () => {
-    history.push("/");
+    history.push('/');
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -50,9 +54,9 @@ const NavBarComponent = ({ currentUser, signOutStart, history }) => {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
+          <h2 className="header" onClick={() => history.push('/')}>
             Presence Service
-          </Typography>
+          </h2>
           {currentUser && (
             <div>
               {currentUser.user.email}
@@ -75,13 +79,13 @@ const NavBarComponent = ({ currentUser, signOutStart, history }) => {
                 id="menu-appbar"
                 anchorEl={anchorEl}
                 anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right"
+                  vertical: 'top',
+                  horizontal: 'right'
                 }}
                 keepMounted
                 transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right"
+                  vertical: 'top',
+                  horizontal: 'right'
                 }}
                 open={open}
                 onClose={handleClose}
@@ -92,16 +96,18 @@ const NavBarComponent = ({ currentUser, signOutStart, history }) => {
           )}
         </Toolbar>
       </AppBar>
+      {isLoading && <LinearProgress color="secondary" />}
     </div>
   );
 };
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser
+  currentUser: selectCurrentUser,
+  isLoading: selectIsUserSessionAvailable
 });
 
-const mapDispatchToProps = dispatch => ({
-  signOutStart: routeBackToLogin => dispatch(signOutStart(routeBackToLogin))
+const mapDispatchToProps = (dispatch) => ({
+  signOutStart: (routeBackToLogin) => dispatch(signOutStart(routeBackToLogin))
 });
 
 export default withRouter(

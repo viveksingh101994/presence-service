@@ -1,9 +1,10 @@
 import App from './app';
 import { routes } from './routing';
-import { DBConnector, FireBase } from './db';
+import { FireBase } from './db';
+import { DB } from './db/connector-mongo';
 async function initService() {
   try {
-    await DBConnector.initConnection();
+    await DB.initConnection();
     await FireBase.initConnection();
     const app = new App([routes], process.env.PORT || '3000');
     app.serverListen();

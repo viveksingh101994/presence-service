@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 import {
   GroupContainer,
@@ -7,7 +7,7 @@ import {
   ImageThumbHolder,
   CustomPadding,
   ImgHolder
-} from "./upload-input";
+} from './upload-input';
 
 const UploadInput = ({ handleChange, label, ...props }) => (
   <GroupContainer>
