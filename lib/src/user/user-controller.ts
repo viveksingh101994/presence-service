@@ -1,7 +1,8 @@
-import { Response, Utils, generateUUID } from '../common';
+import { Response, Utils, generateUUID, getImgTypeAndString } from '../common';
 import { registerUser, authenticateUser } from './user-helper';
 import { jwt } from '../common/jwt';
 import { Response as IResponse } from 'express';
+import { FireBase } from '../db';
 export class UserController {
   static logOut(req, res: IResponse, next) {
     res.clearCookie('auth');
@@ -67,6 +68,11 @@ export class UserController {
         ...payload,
         uid: generateUUID()
       };
+      if (user.avatarUrl) {
+        user.avatarUrl = await FireBase.uploadPicture(
+          getImgTypeAndString(user.avatarUrl)
+        );
+      }
       const userObj = await registerUser(user);
       if (userObj) {
         const jwtData = await UserController.common(res, user);

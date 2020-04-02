@@ -7,9 +7,13 @@ import {
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
 import { connect } from 'react-redux';
-import { emailSignInStart } from '../../redux/user/user.actions';
-import { selectIsUserSessionAvailable } from '../../redux/user/user.selectors';
+import { emailSignInStart, resetError } from '../../redux/user/user.actions';
+import {
+  selectIsUserSessionAvailable,
+  selectIsError
+} from '../../redux/user/user.selectors';
 import { createStructuredSelector } from 'reselect';
+import { FormLabel } from '@material-ui/core';
 class SignIn extends React.Component {
   constructor(props) {
     super(props);
@@ -30,11 +34,27 @@ class SignIn extends React.Component {
   };
 
   handleChange = (e) => {
+    if (
+      !(this.props.isError instanceof Error) &&
+      this.props.isError instanceof Object
+    ) {
+      this.props.reinitializeError();
+    }
     const { value, name } = e.target;
     this.setState({ [name]: value });
   };
 
   render() {
+    let error = false;
+    let message = '';
+    if (
+      !(this.props.isError instanceof Error) &&
+      this.props.isError instanceof Object
+    ) {
+      message = this.props.isError.message;
+      error = true;
+    }
+
     return (
       <SignInContainer>
         <SignInTitle>I already have an account</SignInTitle>
@@ -42,18 +62,23 @@ class SignIn extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <FormInput
             name="email"
+            label="Email"
             value={this.state.email}
             handleChange={this.handleChange}
             type="email"
-            label="Email"
+            placeholder="Email"
+            error={error}
             required
           />
           <FormInput
             name="password"
+            label="Password"
             value={this.state.password}
             handleChange={this.handleChange}
             type="password"
-            label="Password"
+            error={error}
+            placeholder="Password"
+            helperText={message}
             required
           />
           <ButtonsBarContainer>
@@ -68,12 +93,14 @@ class SignIn extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  isLoading: selectIsUserSessionAvailable
+  isLoading: selectIsUserSessionAvailable,
+  isError: selectIsError
 });
 
 const mapDispatchToProps = (dispatch) => ({
   emailSignInStart: (email, password) =>
-    dispatch(emailSignInStart({ email, password }))
+    dispatch(emailSignInStart({ email, password })),
+  reinitializeError: () => dispatch(resetError())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

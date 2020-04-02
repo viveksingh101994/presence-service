@@ -1,19 +1,22 @@
-import React from "react";
+import React from 'react';
 
 import {
   GroupContainer,
   FormInputContainer,
   FormInputLabel
-} from "./form-input.styles";
+} from './form-input.styles';
+import { TextField } from '@material-ui/core';
 
 const FormInput = ({ handleChange, label, ...props }) => (
   <GroupContainer>
-    <FormInputContainer onChange={handleChange} {...props} />
-    {label ? (
-      <FormInputLabel className={props.value.length ? "shrink" : ""}>
-        {label}
-      </FormInputLabel>
-    ) : null}
+    <TextField
+      helperText=""
+      variant="outlined"
+      fullWidth
+      label={label}
+      onChange={handleChange}
+      {...props}
+    />
   </GroupContainer>
 );
 

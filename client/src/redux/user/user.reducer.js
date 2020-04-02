@@ -1,4 +1,4 @@
-import { UserActionTypes } from "./user.types";
+import { UserActionTypes } from './user.types';
 
 const INITIAL_STATE = {
   currentUser: null,
@@ -16,8 +16,8 @@ const userReducer = (state = INITIAL_STATE, action) => {
         isFetching: false
       };
     case UserActionTypes.SIGN_OUT_SUCCESS:
-      if (window.location.pathname !== "/") {
-        window.location.href = "/";
+      if (window.location.pathname !== '/') {
+        window.location.href = '/';
       }
       return {
         ...state,
@@ -40,6 +40,11 @@ const userReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         isFetching: true
+      };
+    case UserActionTypes.REINITIALIZE_ERROR:
+      return {
+        ...state,
+        error: null
       };
     default:
       return state;
