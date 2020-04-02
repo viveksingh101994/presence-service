@@ -1,11 +1,10 @@
 import { Response } from '../common';
-import { getUsers, updatePageVisit, getvisitedUsers } from './profile-helper';
+import { getUsers, getvisitedUsers } from './profile-helper';
 export class ProfileController {
   static async user(req, res, next) {
     try {
       const successResponse = Response.Success;
       successResponse.message = req.user;
-      await updatePageVisit(req.user);
       return next(successResponse);
     } catch (err) {
       return next(Response.ServerError);
