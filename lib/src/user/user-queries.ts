@@ -11,10 +11,6 @@ export const getUserByEmail = async (email: string) => {
 
 export const updateLastLogin = async (user: any) => {
   user.lastLogin = new Date().toString();
-  return user.save();
-};
-
-export const updateIsDashboardVisited = async (user: any) => {
   user.isDashboardVisited = true;
   return user.save();
 };

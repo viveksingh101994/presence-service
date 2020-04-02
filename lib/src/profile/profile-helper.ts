@@ -1,14 +1,9 @@
 import {
   getUserByEmail,
-  updateIsDashboardVisited,
   getUsersByUid,
   getUsersVisited
 } from '../user/user-queries';
 
-export const updatePageVisit = async ({ email }) => {
-  const user = await getUserByEmail(email);
-  return updateIsDashboardVisited(user);
-};
 export const getUsers = async (users) => {
   const userRef = await getUsersByUid(users);
   const otherUsers = [];
