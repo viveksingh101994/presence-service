@@ -1,7 +1,7 @@
-import styled, { css } from "styled-components";
+import styled, { css } from 'styled-components';
 
-const subColor = "grey";
-const mainColor = "black";
+const subColor = 'grey';
+const mainColor = 'black';
 
 const shrinkLabelStyles = css`
   top: -14px;
@@ -38,6 +38,7 @@ export const FormInputContainer = styled.input`
 export const ImageThumbHolderOuter = styled.div`
   float: left;
   width: 100px;
+  margin-right: 16%;
 `;
 export const ImageThumbHolder = styled.div`
   width: 100px;

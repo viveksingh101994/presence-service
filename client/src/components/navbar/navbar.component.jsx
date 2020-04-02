@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
@@ -54,9 +55,13 @@ const NavBarComponent = ({ currentUser, signOutStart, history, isLoading }) => {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <h2 className="header" onClick={() => history.push('/')}>
+          <Typography
+            variant="h6"
+            className={classes.title}
+            onClick={() => history.push('/')}
+          >
             Presence Service
-          </h2>
+          </Typography>
           {currentUser && (
             <div>
               {currentUser.user.email}

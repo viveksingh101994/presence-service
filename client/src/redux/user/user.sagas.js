@@ -1,25 +1,26 @@
-import { takeLatest, put, all, call } from "redux-saga/effects";
+import { takeLatest, put, all, call } from 'redux-saga/effects';
 import {
   SignInSuccess,
   SignInFailure,
   signOutFailure,
   signOutSuccess,
   signUpFailure,
-  signUpSuccess
-} from "./user.actions";
-import { UserActionTypes } from "./user.types";
-import { get, post } from "../../axios/axios.utiils";
+  signUpSuccess,
+  resetError
+} from './user.actions';
+import { UserActionTypes } from './user.types';
+import { get, post } from '../../axios/axios.utiils';
 import {
   authenticateUrl,
   userUrl,
   logoutUrl,
   registerUrl
-} from "../../global.config";
-import { getCookie } from "../../cookie/cookie.util";
-import { cookies } from "../../cookie/cookie.name";
+} from '../../global.config';
+import { getCookie } from '../../cookie/cookie.util';
+import { cookies } from '../../cookie/cookie.name';
 
 export function* getValidToken(userAuth) {
-  if (getCookie(cookies.validToken) === "true") {
+  if (getCookie(cookies.validToken) === 'true') {
     yield put(SignInSuccess({ user: userAuth }));
   } else {
     yield put(signOutSuccess());
@@ -31,7 +32,9 @@ export function* signInWithEmail(payload) {
     const { data } = yield post(authenticateUrl(), payload);
     yield put(SignInSuccess({ user: data }));
   } catch (err) {
-    yield put(SignInFailure(err));
+    yield put(
+      SignInFailure(err && err.request ? JSON.parse(err.request.response) : err)
+    );
   }
 }
 
@@ -45,15 +48,17 @@ function getCurrentUser() {
 
 export function* isUserAuthenticated() {
   try {
-    if (getCookie(cookies.validToken) === "true") {
+    if (getCookie(cookies.validToken) === 'true') {
       const { data } = yield getCurrentUser();
       if (!data) return;
       yield put(SignInSuccess({ user: data }));
     } else {
-      yield put(SignInFailure(new Error("login invalid")));
+      yield put(SignInFailure(new Error('login invalid')));
     }
   } catch (err) {
-    yield put(SignInFailure(err));
+    yield put(
+      SignInFailure(err && err.request ? JSON.parse(err.request.response) : err)
+    );
   }
 }
 
@@ -67,7 +72,11 @@ export function* signOut({ payload }) {
     payload();
     yield put(signOutSuccess());
   } catch (err) {
-    yield put(signOutFailure(err));
+    yield put(
+      signOutFailure(
+        err && err.request ? JSON.parse(err.request.response) : err
+      )
+    );
   }
 }
 
@@ -80,8 +89,14 @@ export function* signUp({ payload }) {
     const userData = yield post(registerUrl(), { payload });
     yield put(signUpSuccess({ user: userData.data }));
   } catch (err) {
-    yield put(signUpFailure(err));
+    yield put(
+      signUpFailure(err && err.request ? JSON.parse(err.request.response) : err)
+    );
   }
+}
+
+export function* resettingError({ payload }) {
+  yield put(resetError());
 }
 
 export function* onSignUpSuccess() {

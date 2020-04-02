@@ -1,13 +1,8 @@
-import { FireBase } from '../db';
 import { IProfile } from '../profile/models/profile-model';
-import { getImgTypeAndString } from '../common';
 import { addUser, getUserByEmail, updateLastLogin } from './user-queries';
-import { userModel, setPassword, validPassword } from './model/user-model';
+import { setPassword, validPassword } from './model/user-model';
 export const registerUser = async (userData: IProfile) => {
   let { email, password, displayName, uid, avatarUrl = null } = userData;
-  if (avatarUrl) {
-    avatarUrl = await FireBase.uploadPicture(getImgTypeAndString(avatarUrl));
-  }
   return UserHelper.register({
     email,
     password,
@@ -40,6 +35,7 @@ export class UserHelper {
       const passwordObj = setPassword(user.password);
       user.salt = passwordObj.salt;
       user.hash = passwordObj.hash;
+      user.lastLogin = new Date().toString();
       await addUser(user);
       return true;
     }
