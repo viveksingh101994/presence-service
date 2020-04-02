@@ -1,26 +1,32 @@
-import React from "react";
+import React from 'react';
 
-import FormInput from "../form-input/form-input.component";
-import CustomButton from "../custom-button/custom-button.component";
+import FormInput from '../form-input/form-input.component';
+import CustomButton from '../custom-button/custom-button.component';
 
-import { connect } from "react-redux";
-import "./sign-up.styles.scss";
-import UploadInput from "../upload-input/upload-input.component";
-import { signUpStart } from "../../redux/user/user.actions";
+import { connect } from 'react-redux';
+import './sign-up.styles.scss';
+import UploadInput from '../upload-input/upload-input.component';
+import { signUpStart } from '../../redux/user/user.actions';
+import { createStructuredSelector } from 'reselect';
+import { selectIsUserSessionAvailable } from '../../redux/user/user.selectors';
 
 class SignUp extends React.Component {
   constructor() {
     super();
     this.state = {
-      displayName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      avatarUrl: ""
+      displayName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      avatarUrl: '',
+      picError: ''
     };
   }
 
-  handleSubmit = async e => {
+  handleSubmit = async (e) => {
+    if (this.props.isLoading) {
+      return false;
+    }
     e.preventDefault();
     const { signUpStart } = this.props;
     const {
@@ -37,7 +43,7 @@ class SignUp extends React.Component {
     signUpStart({ displayName, email, password, avatarUrl });
   };
 
-  avatarUrlChange = async e => {
+  avatarUrlChange = async (e) => {
     e.preventDefault();
     if (isValidImage(e.target.files)) {
       const file = await toBase64(e.target.files[0]);
@@ -45,7 +51,7 @@ class SignUp extends React.Component {
     }
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
@@ -95,6 +101,7 @@ class SignUp extends React.Component {
             label="Confirm Password"
             required
           ></FormInput>
+          sss
           <UploadInput
             type="file"
             name="uploadAvatar"
@@ -102,40 +109,47 @@ class SignUp extends React.Component {
             onChange={this.avatarUrlChange}
             label="Upload Image"
           />
-          <CustomButton type="submit"> SIGN UP</CustomButton>
+          <CustomButton disabled={this.props.isLoading} type="submit">
+            {' '}
+            SIGN UP
+          </CustomButton>
         </form>
       </div>
     );
   }
 }
 
-const toBase64 = file => {
+const toBase64 = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
+    reader.onerror = (error) => reject(error);
   });
 };
 
-const isValidImage = files => {
+const isValidImage = (files) => {
   if (!(files instanceof FileList)) {
     return false;
   }
   const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
   if (!allowedExtensions.test(files[0].name)) {
-    alert("File format must be JPG, JPEG, PNG, or GIF.");
+    alert('File format must be JPG, JPEG, PNG, or GIF.');
     return false;
   }
   const fileSize = Math.round(files[0].size / 1024);
   if (fileSize > 300) {
-    alert("Image size must not exceed 200 KB.");
+    alert('Image size must not exceed 200 KB.');
     return false;
   }
   return true;
 };
 
-const mapDispatchToProps = dispatch => ({
-  signUpStart: userCredentials => dispatch(signUpStart(userCredentials))
+const mapStateToProps = createStructuredSelector({
+  isLoading: selectIsUserSessionAvailable
 });
-export default connect(null, mapDispatchToProps)(SignUp);
+
+const mapDispatchToProps = (dispatch) => ({
+  signUpStart: (userCredentials) => dispatch(signUpStart(userCredentials))
+});
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

@@ -1,4 +1,5 @@
-export interface Profile {
+export interface IProfile {
+  uid: string;
   email: string;
   displayName: string;
   lastLogin: Date;

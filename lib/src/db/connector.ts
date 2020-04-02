@@ -1,20 +1,8 @@
 import { firebaseConfig } from './config';
-import * as firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
 import * as admin from 'firebase-admin';
 import * as stream from 'stream';
 import { generateUUID } from '../common';
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-export class DBConnector {
-  static auth: any;
-  static firestore: any;
-  static initConnection() {
-    firebase.initializeApp(firebaseConfig);
-    this.auth = firebase.auth();
-    this.firestore = firebase.firestore();
-  }
-}
 
 export class FireBase {
   static storage: any;
@@ -35,7 +23,7 @@ export class FireBase {
     return new Promise((resolve, reject) => {
       if (!base64) {
         reject(
-          'news.provider#uploadPicture - Could not upload picture because at least one param is missing.'
+          'Could not upload picture because at least one param is missing.'
         );
       }
       let bufferStream = new stream.PassThrough();

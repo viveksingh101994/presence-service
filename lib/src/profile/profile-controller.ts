@@ -5,7 +5,7 @@ export class ProfileController {
     try {
       const successResponse = Response.Success;
       successResponse.message = req.user;
-      await updatePageVisit(req.user, { isDashboardVisited: true });
+      await updatePageVisit(req.user);
       return next(successResponse);
     } catch (err) {
       return next(Response.ServerError);

@@ -1,30 +1,35 @@
-import React from "react";
+import React from 'react';
 import {
   SignInContainer,
   SignInTitle,
   ButtonsBarContainer
-} from "./sign-in.styles";
-import FormInput from "../form-input/form-input.component";
-import CustomButton from "../custom-button/custom-button.component";
-import { connect } from "react-redux";
-import { emailSignInStart } from "../../redux/user/user.actions";
+} from './sign-in.styles';
+import FormInput from '../form-input/form-input.component';
+import CustomButton from '../custom-button/custom-button.component';
+import { connect } from 'react-redux';
+import { emailSignInStart } from '../../redux/user/user.actions';
+import { selectIsUserSessionAvailable } from '../../redux/user/user.selectors';
+import { createStructuredSelector } from 'reselect';
 class SignIn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: ""
+      email: '',
+      password: ''
     };
   }
 
-  handleSubmit = async e => {
+  handleSubmit = async (e) => {
+    if (this.props.isLoading) {
+      return false;
+    }
     e.preventDefault();
     const { emailSignInStart } = this.props;
     const { email, password } = this.state;
     emailSignInStart(email, password);
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     const { value, name } = e.target;
     this.setState({ [name]: value });
   };
@@ -52,7 +57,9 @@ class SignIn extends React.Component {
             required
           />
           <ButtonsBarContainer>
-            <CustomButton type="submit">Sign In</CustomButton>
+            <CustomButton type="submit" disabled={this.props.isLoading}>
+              Sign In
+            </CustomButton>
           </ButtonsBarContainer>
         </form>
       </SignInContainer>
@@ -60,9 +67,13 @@ class SignIn extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapStateToProps = createStructuredSelector({
+  isLoading: selectIsUserSessionAvailable
+});
+
+const mapDispatchToProps = (dispatch) => ({
   emailSignInStart: (email, password) =>
     dispatch(emailSignInStart({ email, password }))
 });
 
-export default connect(null, mapDispatchToProps)(SignIn);
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

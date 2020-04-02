@@ -1,8 +1,7 @@
-import { Response, Utils } from '../common';
+import { Response, Utils, generateUUID } from '../common';
 import { registerUser, authenticateUser } from './user-helper';
 import { jwt } from '../common/jwt';
 import { Response as IResponse } from 'express';
-
 export class UserController {
   static logOut(req, res: IResponse, next) {
     res.clearCookie('auth');
@@ -22,7 +21,7 @@ export class UserController {
         successResponse.message = jwtData;
         return next(successResponse);
       } else {
-        return next(Response.InvalidParam);
+        return next(Response.UnAuthorized);
       }
     } catch (err) {
       if (err.code && err.message) {
@@ -40,13 +39,11 @@ export class UserController {
   }
 
   private static async common(res: IResponse, userObj) {
-    const userSnapshot = await userObj.get();
-    const snapShotData = userSnapshot.data();
     const jwtData = {
-      avatarUrl: snapShotData.avatarUrl,
-      email: snapShotData.email,
-      displayName: snapShotData.displayName,
-      uid: userSnapshot.id
+      avatarUrl: userObj.avatarUrl,
+      email: userObj.email,
+      displayName: userObj.displayName,
+      uid: userObj.uid
     };
     const xUser = await jwt.generateJwtForUser(jwtData);
     res.cookie('auth', xUser, {
@@ -61,19 +58,23 @@ export class UserController {
   }
 
   static async register(req, res: IResponse, next) {
-    const user = req.body.payload;
-    if (!UserController.validateParams(user)) {
+    const { payload } = req.body;
+    if (!UserController.validateParams(payload)) {
       return next(Response.InvalidParam);
     }
     try {
+      const user = {
+        ...payload,
+        uid: generateUUID()
+      };
       const userObj = await registerUser(user);
       if (userObj) {
-        const jwtData = await UserController.common(res, userObj);
+        const jwtData = await UserController.common(res, user);
         const successResponse = Response.Success;
         successResponse.message = jwtData;
         return next(successResponse);
       } else {
-        return next(Response.InvalidParam);
+        return next(Response.UserAlreadyExist);
       }
     } catch (err) {
       if (err.code && err.message) {

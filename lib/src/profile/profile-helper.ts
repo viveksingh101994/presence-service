@@ -1,37 +1,42 @@
-import { DBConnector } from '../db';
-import * as firebase from 'firebase/app';
-import { updateUserProfile } from '../user/user-helper';
+import {
+  getUserByEmail,
+  updateIsDashboardVisited,
+  getUsersByUid,
+  getUsersVisited
+} from '../user/user-queries';
 
-export const updatePageVisit = async (user, additionalData) => {
-  return updateUserProfile(user, additionalData);
+export const updatePageVisit = async ({ email }) => {
+  const user = await getUserByEmail(email);
+  return updateIsDashboardVisited(user);
 };
 export const getUsers = async (users) => {
-  const userRef = DBConnector.firestore
-    .collection('users')
-    .where(firebase.firestore.FieldPath.documentId(), 'in', users);
-  const usersSnapshot = await userRef.get();
+  const userRef = await getUsersByUid(users);
   const otherUsers = [];
-  if (usersSnapshot && usersSnapshot.docs)
-    for (let snapshot of usersSnapshot.docs) {
+  if (Array.isArray(userRef))
+    for (let user of userRef) {
       otherUsers.push({
-        uid: snapshot.id,
-        ...snapshot.data()
+        uid: user.get('uid'),
+        email: user.get('email'),
+        displayName: user.get('displayName'),
+        avatarUrl: user.get('avatarUrl') ? user.get('avatarUrl') : '',
+        lastLogin: user.get('lastLogin')
       });
     }
   return otherUsers;
 };
 
 export const getvisitedUsers = async (): Promise<any[]> => {
-  const userRef = DBConnector.firestore
-    .collection('users')
-    .where('isDashboardVisited', '==', true);
-  const usersSnapshot = await userRef.get();
-  const userList = [];
-  if (usersSnapshot && usersSnapshot.docs)
-    for (let snapshot of usersSnapshot.docs) {
-      userList.push({
-        ...snapshot.data()
+  const userRef = await getUsersVisited();
+  const otherUsers = [];
+  if (Array.isArray(userRef))
+    for (let user of userRef) {
+      otherUsers.push({
+        uid: user.get('uid'),
+        email: user.get('email'),
+        displayName: user.get('displayName'),
+        avatarUrl: user.get('avatarUrl') ? user.get('avatarUrl') : '',
+        lastLogin: user.get('lastLogin')
       });
     }
-  return userList;
+  return otherUsers;
 };
