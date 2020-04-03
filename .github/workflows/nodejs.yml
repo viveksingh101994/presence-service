@@ -5,30 +5,28 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [10.x]
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Install dependencies
-      working-directory: backend
-      run: npm install
-    - name: Run prettier test
-      working-directory: backend
-      run: npm run test:prettier
-    - name: Run TSLINT test
-      working-directory: backend
-      run: npm run test:tslint
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install dependencies
+        run: npm install
+      - name: Run prettier test
+        run: npm run test:prettier
+      - name: Run TSLINT test
+        run: npm run test:tslint
+      - name: Run UNIT test
+        run: npm run test:unit
