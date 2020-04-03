@@ -1,10 +1,6 @@
 import React from 'react';
 
-import {
-  GroupContainer,
-  FormInputContainer,
-  FormInputLabel
-} from './form-input.styles';
+import { GroupContainer } from './form-input.styles';
 import { TextField } from '@material-ui/core';
 
 const FormInput = ({ handleChange, label, ...props }) => (

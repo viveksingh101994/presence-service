@@ -13,7 +13,6 @@ import {
   selectIsError
 } from '../../redux/user/user.selectors';
 import { createStructuredSelector } from 'reselect';
-import { FormLabel } from '@material-ui/core';
 class SignIn extends React.Component {
   constructor(props) {
     super(props);
