@@ -39,11 +39,7 @@ export class FireBase {
           })
         )
         .on('error', (error) => {
-          reject(
-            `news.provider#uploadPicture - Error while uploading picture ${JSON.stringify(
-              error
-            )}`
-          );
+          reject(`Error while uploading picture ${JSON.stringify(error)}`);
         })
         .on('finish', (resp) => {
           file.getSignedUrl(
@@ -55,7 +51,6 @@ export class FireBase {
               if (error) {
                 reject(error);
               }
-              console.log('download url ', url);
               resolve(url);
             }
           );

@@ -36,6 +36,7 @@ export class UserHelper {
       user.salt = passwordObj.salt;
       user.hash = passwordObj.hash;
       user.lastLogin = new Date().toString();
+      user.isDashboardVisited = true;
       await addUser(user);
       return true;
     }

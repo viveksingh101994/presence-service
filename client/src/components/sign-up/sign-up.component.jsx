@@ -7,7 +7,8 @@ import { connect } from 'react-redux';
 import './sign-up.styles.scss';
 import UploadInput from '../upload-input/upload-input.component';
 import { signUpStart } from '../../redux/user/user.actions';
-
+import { createStructuredSelector } from 'reselect';
+import { selectIsUserSessionAvailable } from '../../redux/user/user.selectors';
 class SignUp extends React.Component {
   constructor() {
     super();
@@ -21,6 +22,9 @@ class SignUp extends React.Component {
   }
 
   handleSubmit = async (e) => {
+    if (this.props.isLoading) {
+      return false;
+    }
     e.preventDefault();
     const { signUpStart } = this.props;
     const {
@@ -102,7 +106,10 @@ class SignUp extends React.Component {
             onChange={this.avatarUrlChange}
             label="Upload Image"
           />
-          <CustomButton type="submit"> SIGN UP</CustomButton>
+          <CustomButton type="submit" disabled={this.props.isLoading}>
+            {' '}
+            SIGN UP
+          </CustomButton>
         </form>
       </div>
     );
@@ -135,7 +142,10 @@ const isValidImage = (files) => {
   return true;
 };
 
+const mapStateToProps = createStructuredSelector({
+  isLoading: selectIsUserSessionAvailable
+});
 const mapDispatchToProps = (dispatch) => ({
   signUpStart: (userCredentials) => dispatch(signUpStart(userCredentials))
 });
-export default connect(null, mapDispatchToProps)(SignUp);
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

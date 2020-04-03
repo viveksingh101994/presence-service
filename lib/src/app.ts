@@ -28,12 +28,17 @@ class App {
   }
 
   private initializeMiddlewares() {
-    this.app.use(bodyParser.json());
     this.app.use(this.loggerMiddleware);
-    this.app.use(bodyParser.json());
+    this.app.use(
+      bodyParser.json({
+        limit: '1mb'
+      })
+    );
     this.app.use(
       bodyParser.urlencoded({
-        extended: false
+        limit: '1mb',
+        extended: true,
+        parameterLimit: 1024 * 5
       })
     );
     this.app.use(
@@ -74,6 +79,7 @@ class App {
     this.app.use((errObj, req, res, next) => {
       let errorResp = errObj;
       if (errObj instanceof Error) {
+        console.log('Error=>', errObj);
         errorResp = Response.ServerError;
         errorResp.err = errObj;
       }
