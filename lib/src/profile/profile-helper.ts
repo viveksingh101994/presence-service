@@ -1,11 +1,7 @@
-import {
-  getUserByEmail,
-  getUsersByUid,
-  getUsersVisited
-} from '../user/user-queries';
+import { UserQueries } from '../user/user-queries';
 
 export const getUsers = async (users) => {
-  const userRef = await getUsersByUid(users);
+  const userRef = await UserQueries.getUsersByUid(users);
   const otherUsers = [];
   if (Array.isArray(userRef))
     for (let user of userRef) {
@@ -13,7 +9,7 @@ export const getUsers = async (users) => {
         uid: user.get('uid'),
         email: user.get('email'),
         displayName: user.get('displayName'),
-        avatarUrl: user.get('avatarUrl') ? user.get('avatarUrl') : '',
+        avatarUrl: user.get('avatarUrl'),
         lastLogin: user.get('lastLogin')
       });
     }
@@ -21,7 +17,7 @@ export const getUsers = async (users) => {
 };
 
 export const getvisitedUsers = async (): Promise<any[]> => {
-  const userRef = await getUsersVisited();
+  const userRef = await UserQueries.getUsersVisited();
   const otherUsers = [];
   if (Array.isArray(userRef))
     for (let user of userRef) {
@@ -29,7 +25,7 @@ export const getvisitedUsers = async (): Promise<any[]> => {
         uid: user.get('uid'),
         email: user.get('email'),
         displayName: user.get('displayName'),
-        avatarUrl: user.get('avatarUrl') ? user.get('avatarUrl') : '',
+        avatarUrl: user.get('avatarUrl'),
         lastLogin: user.get('lastLogin')
       });
     }

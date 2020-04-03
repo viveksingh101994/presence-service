@@ -2,13 +2,9 @@ import { Response } from '../common';
 import { getUsers, getvisitedUsers } from './profile-helper';
 export class ProfileController {
   static async user(req, res, next) {
-    try {
-      const successResponse = Response.Success;
-      successResponse.message = req.user;
-      return next(successResponse);
-    } catch (err) {
-      return next(Response.ServerError);
-    }
+    const successResponse = Response.Success;
+    successResponse.message = req.user;
+    return next(successResponse);
   }
 
   static async room(req, res, next) {
@@ -22,6 +18,7 @@ export class ProfileController {
       successResponse.message = roomUsers;
       return next(successResponse);
     } catch (err) {
+      console.log('Room=>', err);
       return next(Response.ServerError);
     }
   }

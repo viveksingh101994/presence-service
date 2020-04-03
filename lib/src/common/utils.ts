@@ -37,8 +37,6 @@ export const Utils = {
       Math.max(email.indexOf('+'), email.indexOf('~')) >= email.indexOf('@')
     ) {
       emailValid = false;
-    } else if (email.indexOf('@') === email.length) {
-      emailValid = false;
     } else if (email.indexOf('..') >= 0) {
       emailValid = false;
     } else if (

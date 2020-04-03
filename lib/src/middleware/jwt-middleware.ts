@@ -1,10 +1,9 @@
 import { Response } from '../common';
-import { Response as IResponse } from 'express';
 import { jwt } from '../common/jwt';
 
 // Need to fix the middleware
 export class JWTMiddleware {
-  static async verify(req, res: IResponse, next) {
+  static async verify(req, res, next) {
     if (req.cookies.auth) {
       try {
         const decoded: any = await jwt.verifyandDecodeJwt(req.cookies.auth);

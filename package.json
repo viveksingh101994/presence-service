@@ -8,7 +8,7 @@
     "build:w": "tsc -w",
     "start": "node dist/server.js",
     "test:unit:nocoverage": "NODE_ENV=test mocha --opts mocha_unit.opts",
-    "test:unit": "NODE_ENV=test nyc mocha --opts mocha_unit.opts",
+    "test:unit": "nyc mocha --opts mocha_unit.opts",
     "test:tslint": "tslint  --project tsconfig.json",
     "fix:tslint": "tslint --fix --project tsconfig.json",
     "test:prettier": "prettier --list-different \"{lib,migrations,seeds}/**/*.{ts,js,css,scss,md,html}\"",

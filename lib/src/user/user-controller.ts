@@ -1,10 +1,9 @@
 import { Response, Utils, generateUUID, getImgTypeAndString } from '../common';
 import { registerUser, authenticateUser } from './user-helper';
 import { jwt } from '../common/jwt';
-import { Response as IResponse } from 'express';
 import { FireBase } from '../db';
 export class UserController {
-  static logOut(req, res: IResponse, next) {
+  static logOut(req, res, next) {
     res.clearCookie('auth');
     res.clearCookie('validToken');
     return next(Response.Success);
@@ -25,21 +24,12 @@ export class UserController {
         return next(Response.UnAuthorized);
       }
     } catch (err) {
-      if (err.code && err.message) {
-        const response = Response.FireBase;
-        response.message = {
-          code: err.code,
-          message: err.message
-        };
-        return next(response);
-      }
-      // tslint:disable-next-line:no-console
       console.log('User Controller, authenticate====>', err);
       return next(Response.ServerError);
     }
   }
 
-  private static async common(res: IResponse, userObj) {
+  private static async common(res, userObj) {
     const jwtData = {
       avatarUrl: userObj.avatarUrl,
       email: userObj.email,
@@ -58,7 +48,7 @@ export class UserController {
     return jwtData;
   }
 
-  static async register(req, res: IResponse, next) {
+  static async register(req, res, next) {
     const { payload } = req.body;
     if (!UserController.validateParams(payload)) {
       return next(Response.InvalidParam);
@@ -83,15 +73,6 @@ export class UserController {
         return next(Response.UserAlreadyExist);
       }
     } catch (err) {
-      if (err.code && err.message) {
-        const response = Response.FireBase;
-        response.message = {
-          code: err.code,
-          message: err.message
-        };
-        return next(response);
-      }
-      // tslint:disable-next-line:no-console
       console.log('User Controller, register====>', err);
       return next(Response.ServerError);
     }
