@@ -32,10 +32,6 @@ const UserSchema = new Schema({
   },
   isDashboardVisited: {
     type: Boolean
-  },
-
-  isConnected: {
-    type: Boolean
   }
 });
 
