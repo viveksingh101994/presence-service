@@ -9,7 +9,7 @@ import { corsSettings } from './db/config';
 class App {
   app: express.Application;
   port: number;
-  private server: any;
+  server: any;
   constructor(routes, port) {
     this.app = express();
     this.server = http.createServer(this.app);
@@ -58,9 +58,9 @@ class App {
 
   private initializeClient(routes) {
     if (process.env.NODE_ENV === 'production') {
-      this.app.use(express.static(path.join(__dirname, '../client/build')));
+      this.app.use(express.static(path.join(__dirname, '../../client/build')));
       this.app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+        res.sendFile(path.join(__dirname, '../../client/build', 'index.html'));
       });
     }
   }

@@ -1,16 +1,13 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Avatar from "@material-ui/core/Avatar";
-import { deepOrange } from "@material-ui/core/colors";
-import { selectPresentUserList } from "../../redux/presence/presence.selectors";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
-import MaterialCardComponent from "../material-card/material-card.component";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
+import { deepOrange } from '@material-ui/core/colors';
+import MaterialCardComponent from '../material-card/material-card.component';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
-    "& > *": {
+    display: 'flex',
+    '& > *': {
       margin: theme.spacing(1)
     }
   },
@@ -23,7 +20,7 @@ const PresenceComponent = ({ userList }) => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      {userList.map(element => {
+      {userList.map((element) => {
         const { displayName, avatarUrl, uid } = element;
         return (
           <MaterialCardComponent {...element} key={uid}>
@@ -41,8 +38,4 @@ const PresenceComponent = ({ userList }) => {
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  userList: selectPresentUserList
-});
-
-export default connect(mapStateToProps)(PresenceComponent);
+export default PresenceComponent;
