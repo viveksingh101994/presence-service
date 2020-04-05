@@ -9,7 +9,7 @@ import { corsSettings } from './db/config';
 class App {
   app: express.Application;
   port: number;
-  private server: any;
+  server: any;
   constructor(routes, port) {
     this.app = express();
     this.server = http.createServer(this.app);

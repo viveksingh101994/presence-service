@@ -52,7 +52,8 @@
     "express": "^4.17.1",
     "firebase-admin": "^8.10.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.7"
+    "mongoose": "^5.9.7",
+    "socket.io": "^2.3.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",
