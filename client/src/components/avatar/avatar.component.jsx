@@ -1,43 +1,79 @@
-import React, { Component } from 'react';
-import PresenceComponent from '../presence/presence.component';
-import './avatar.styles.scss';
-import { Paper } from '@material-ui/core';
-import socketIOClient from 'socket.io-client';
-import { url } from '../../global.config';
-
+import React, { Component } from "react";
+import { PubNubProvider } from "pubnub-react";
+import PresenceComponent from "../presence/presence.component";
+import PubNubHelper from "../../pubnub/pubnub.utils";
+import {
+  getPresentUsersStart,
+  setInitialUser
+} from "../../redux/presence/presence.actions";
+import { connect } from "react-redux";
+import { selectCurrentUser } from "../../redux/user/user.selectors";
+import { createStructuredSelector } from "reselect";
+import "./avatar.styles.scss";
+import { Paper } from "@material-ui/core";
 class AvatarComponent extends Component {
   constructor(props) {
     super(props);
-    const socket = socketIOClient(url);
-    this.state = {
-      users: []
-    };
-    socket.on('roomUsers', (roomMembers) => {
-      this.setState(
-        {
-          users: roomMembers.users
-        },
-        console.log(this.state)
-      );
+    this.props.setUserList(this.props.currentUser);
+    this.initPubnubServices();
+  }
+
+  checkHereNow = async () => {
+    try {
+      const {
+        currentUser: { user },
+        roomUserList
+      } = this.props;
+      const occupants = await this.pubnub.checkHereNow();
+      if (occupants) {
+        roomUserList({ occupants, user });
+      }
+    } catch (err) {
+      console.log("Something went wrong");
+    }
+  };
+
+  initPubnubServices() {
+    const {
+      currentUser: { user }
+    } = this.props;
+    this.pubnub = new PubNubHelper(user.uid);
+    this.pubnub.subscribeInitiater();
+    this.pubnub.addListenerHelper({
+      presence: this.checkHereNow
     });
+    this.checkHereNow();
+  }
+
+  componentWillUnmount() {
+    if (this.pubnub) this.pubnub.unsubscribeHelper();
   }
 
   render() {
     return (
-      <React.Fragment>
-        {this.state.users.length > 0 ? (
+      <PubNubProvider client={this.pubnub}>
+        {this.props.currentUser.user ? (
           <Paper elevation={3} className="paper-container">
             <div>
               <h1>Active Users</h1>
               <div className="avatar-container">
-                <PresenceComponent userList={this.state.users} />
+                <PresenceComponent />
               </div>
             </div>
           </Paper>
         ) : null}
-      </React.Fragment>
+      </PubNubProvider>
     );
   }
 }
 
-export default AvatarComponent;
+const mapDispatchToProps = dispatch => ({
+  setUserList: user => dispatch(setInitialUser(user)),
+  roomUserList: userList => dispatch(getPresentUsersStart(userList))
+});
+
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AvatarComponent);

@@ -74,35 +74,3 @@ export const getImgTypeAndString = (avatarUrl: string): { imgType; base64 } => {
 export const generateUUID = (): string => {
   return crypto.randomBytes(16).toString('hex');
 };
-
-export const getCookie = (req, name) => {
-  var cookieArr = req.headers.cookie.split(';');
-  for (var i = 0; i < cookieArr.length; i++) {
-    var cookiePair = cookieArr[i].split('=');
-    if (name === cookiePair[0].trim()) {
-      return decodeURIComponent(cookiePair[1]);
-    }
-  }
-  return null;
-};
-
-const users = [];
-
-export const getRoomUsers = () => {
-  return users;
-};
-export const insertUserInRoom = (user) => {
-  if (!users.some((x) => x.uid === user.uid)) {
-    users.push(user);
-    return true;
-  }
-  return false;
-};
-
-export const userLeave = (id) => {
-  const index = users.findIndex((user) => user.id === id);
-
-  if (index !== -1) {
-    return users.splice(index, 1)[0];
-  }
-};

@@ -20,81 +20,81 @@ describe('Profile Controller=>user', () => {
   });
 });
 
-// describe('Profile Controller=>room', () => {
-//   let stubArr = [];
-//   before((done) => {
-//     stubArr.push(
-//       sinon.stub(UserQueries, 'getUsersByUid').callsFake(getUsersByUidMock)
-//     );
-//     done();
-//   });
-//   it('should return invalid param Response if payload is not there', (done) => {
-//     const req = {
-//       body: {}
-//     };
-//     const next = (response) => {
-//       expect(response.status).to.be.equal(Response.InvalidParam.status);
-//       expect(response.message.message).to.be.equal(
-//         Response.InvalidParam.message.message
-//       );
-//       done();
-//     };
-//     ProfileController.room(req, null, next);
-//   });
+describe('Profile Controller=>room', () => {
+  let stubArr = [];
+  before((done) => {
+    stubArr.push(
+      sinon.stub(UserQueries, 'getUsersByUid').callsFake(getUsersByUidMock)
+    );
+    done();
+  });
+  it('should return invalid param Response if payload is not there', (done) => {
+    const req = {
+      body: {}
+    };
+    const next = (response) => {
+      expect(response.status).to.be.equal(Response.InvalidParam.status);
+      expect(response.message.message).to.be.equal(
+        Response.InvalidParam.message.message
+      );
+      done();
+    };
+    ProfileController.room(req, null, next);
+  });
 
-//   it('should return zero users if invalid payload is there', (done) => {
-//     const req = {
-//       body: {
-//         payload: ['1235']
-//       }
-//     };
-//     const next = (response) => {
-//       expect(response.status).to.be.equal(Response.Success.status);
-//       expect(response.message).to.be.instanceOf(Array);
-//       expect(response.message.length).to.be.equal(0);
-//       done();
-//     };
-//     ProfileController.room(req, null, next);
-//   });
+  it('should return zero users if invalid payload is there', (done) => {
+    const req = {
+      body: {
+        payload: ['1235']
+      }
+    };
+    const next = (response) => {
+      expect(response.status).to.be.equal(Response.Success.status);
+      expect(response.message).to.be.instanceOf(Array);
+      expect(response.message.length).to.be.equal(0);
+      done();
+    };
+    ProfileController.room(req, null, next);
+  });
 
-//   it('should return zero users if valid payload is there', (done) => {
-//     const req = {
-//       body: {
-//         payload: ['1234']
-//       }
-//     };
-//     const next = (response) => {
-//       expect(response.status).to.be.equal(Response.Success.status);
-//       expect(response.message).to.be.instanceOf(Array);
-//       expect(response.message.length).to.be.equal(1);
-//       done();
-//     };
-//     ProfileController.room(req, null, next);
-//   });
+  it('should return zero users if valid payload is there', (done) => {
+    const req = {
+      body: {
+        payload: ['1234']
+      }
+    };
+    const next = (response) => {
+      expect(response.status).to.be.equal(Response.Success.status);
+      expect(response.message).to.be.instanceOf(Array);
+      expect(response.message.length).to.be.equal(1);
+      done();
+    };
+    ProfileController.room(req, null, next);
+  });
 
-//   it('should return zero users if valid payload is there', (done) => {
-//     const req = {
-//       body: {
-//         payload: ['122']
-//       }
-//     };
-//     const next = (response) => {
-//       expect(response.status).to.be.equal(Response.ServerError.status);
-//       expect(response.message.message).to.be.equal(
-//         Response.ServerError.message.message
-//       );
-//       done();
-//     };
-//     ProfileController.room(req, null, next);
-//   });
+  it('should return zero users if valid payload is there', (done) => {
+    const req = {
+      body: {
+        payload: ['122']
+      }
+    };
+    const next = (response) => {
+      expect(response.status).to.be.equal(Response.ServerError.status);
+      expect(response.message.message).to.be.equal(
+        Response.ServerError.message.message
+      );
+      done();
+    };
+    ProfileController.room(req, null, next);
+  });
 
-//   after((done) => {
-//     stubArr.forEach((stub) => {
-//       stub.restore();
-//     });
-//     done();
-//   });
-// });
+  after((done) => {
+    stubArr.forEach((stub) => {
+      stub.restore();
+    });
+    done();
+  });
+});
 
 describe('Profile Controller=>visitedUser', () => {
   it('should return visited users as zero if there is no users in response', (done) => {
