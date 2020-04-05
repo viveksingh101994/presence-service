@@ -11,12 +11,6 @@ router.get(
   ProfileController.user
 );
 
-router.post(
-  Utils.getRoutePrefix(RouteType.private, '/room-user'),
-  JWTMiddleware.verify,
-  ProfileController.room
-);
-
 router.get(
   Utils.getRoutePrefix(RouteType.private, '/visted-users'),
   JWTMiddleware.verify,
