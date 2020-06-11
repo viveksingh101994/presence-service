@@ -16,11 +16,29 @@ export class UserQueries {
     return user.save();
   };
 
+  static updateIsConnected = async (
+    user: any,
+    isConnected: boolean
+  ): Promise<any> => {
+    return userModel.findOneAndUpdate(
+      { uid: user.uid },
+      {
+        $set: {
+          isConnected: isConnected
+        }
+      }
+    );
+  };
+
   static getUsersByUid = async (users): Promise<any> => {
     return userModel.find({ uid: { $in: users } });
   };
 
   static getUsersVisited = async (): Promise<any> => {
     return userModel.find({ isDashboardVisited: true });
+  };
+
+  static getActiveUsers = async (): Promise<any> => {
+    return userModel.find({ isConnected: true });
   };
 }

@@ -1,27 +1,27 @@
-import React, { lazy, Suspense } from "react";
-import "./App.css";
-import { Switch, Route, Redirect } from "react-router-dom";
-import Spinner from "./components/spinner/spinner.component";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
-import { GlobalStyle } from "./global.styles";
+import React, { lazy, Suspense } from 'react';
+import './App.css';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import Spinner from './components/spinner/spinner.component';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { GlobalStyle } from './global.styles';
 import {
   selectCurrentUser,
   selectIsUserSessionAvailable,
   selectIsError
-} from "./redux/user/user.selectors";
-import { checkUserSession } from "./redux/user/user.actions";
-import NavBarComponent from "./components/navbar/navbar.component";
-import Container from "@material-ui/core/Container";
+} from './redux/user/user.selectors';
+import { checkUserSession } from './redux/user/user.actions';
+import NavBarComponent from './components/navbar/navbar.component';
+import Container from '@material-ui/core/Container';
 
 const DashboardPage = lazy(() =>
-  import("./pages/dashboard/dashboard.component")
+  import('./pages/dashboard/dashboard.component')
 );
 const SignInAndSignUpPage = lazy(() =>
-  import("./pages/sign-in-and-sign-up/sign-in-and-sign-up.component")
+  import('./pages/sign-in-and-sign-up/sign-in-and-sign-up.component')
 );
 const ErrorBoundary = lazy(() =>
-  import("./components/error-boundary/error-boundary.component")
+  import('./components/error-boundary/error-boundary.component')
 );
 
 class App extends React.Component {
@@ -83,7 +83,7 @@ const mapStateToProps = createStructuredSelector({
   isError: selectIsError
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   checkUserSession: () => dispatch(checkUserSession())
 });
 
